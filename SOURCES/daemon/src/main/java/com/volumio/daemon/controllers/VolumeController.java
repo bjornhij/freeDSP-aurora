@@ -3,10 +3,17 @@ package com.volumio.daemon.controllers;
 
 import com.volumio.daemon.Volume;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+
 @Controller
+@Validated
 public class VolumeController {
 
     @Autowired
@@ -20,7 +27,7 @@ public class VolumeController {
 
     @PutMapping("/volume/{vol}")
     @ResponseBody
-    void putVolume(@PathVariable(value="vol") int volume) {
+    void putVolume(@PathVariable(value="vol") @Min(0) @Max(255) Integer volume) {
         this.volume.setVolume(volume);
     }
 }
