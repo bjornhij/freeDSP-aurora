@@ -27,7 +27,7 @@ public class VolumeController {
 
     @PutMapping("/volume/{vol}")
     @ResponseBody
-    void putVolume(@PathVariable(value="vol") @Min(0) @Max(255) Integer volume) {
+    void putVolume(@PathVariable(value="vol") @Min(-120) @Max(0) Integer volume) {
         this.volume.setVolume(volume);
     }
 }
