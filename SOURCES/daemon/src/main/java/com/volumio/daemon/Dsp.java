@@ -15,28 +15,30 @@ public class Dsp {
     @Autowired
     private Environment env;
 
-    @Value("${volumiodaemon.initial_volume:-120}")
-    private int volume;
+    private int volume = 0;
 
     @Value("${volumiodaemon.initial_input}")
     private String input;
 
     int getVolume() {
+
         return volume;
     }
 
     void setVolume(int volume) {
 
+        // http://www.playdotsound.com/portfolio-item/decibel-db-to-float-value-calculator-making-sense-of-linear-values-in-audio-tools/
+        // linear-to-db(x) = log(x) * 20
+
         this.volume = volume;
 
-        double dsp_volume = Math.pow(10.0, volume/20.0);
+        double dsp_volume = Math.log(volume / 100.0) * 20;
 
-        logger.info(Double.toString(dsp_volume));
+        logger.info("Setting to " + dsp_volume + "db");
 
-        // 4fac00012cd7
+        dsp_volume = Math.pow(10.0, dsp_volume/20.0);
+
         String data = this.makeParameter(20396, dsp_volume);
-
-        logger.info(data);
     }
 
     String getInput() {
@@ -57,17 +59,8 @@ public class Dsp {
         long val_824 = this.convertTo824(val);
 
         data = data + String.format("%02X", (byte)((val_824 >> 24) & 0x000000FF));
-
-        logger.info(data);
-
         data = data + String.format("%02X", (byte)((val_824 >> 16) & 0x000000FF));
-
-        logger.info(data);
-
         data = data + String.format("%02X", (byte)((val_824 >> 8) & 0x000000FF));
-
-        logger.info(data);
-
         data = data + String.format("%02X", (byte)(val_824 & 0x000000FF));
 
         logger.info(data);
@@ -86,14 +79,8 @@ public class Dsp {
         intpart = (short) Math.floor( val );
         fractpart = val - intpart;
 
-        logger.info(Long.toBinaryString(intpart));
-
-        logger.info(Float.toString(intpart)); logger.info(Double.toString(fractpart));
-
         ret = ((intpart << 24) & 0xff000000)
                 + ((short)(fractpart * 16777216.f) & 0x00ffffff);
-
-        logger.info(Long.toBinaryString(ret));
 
         return ret;
     }
