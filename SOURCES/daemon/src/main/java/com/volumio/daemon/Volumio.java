@@ -2,6 +2,7 @@ package com.volumio.daemon;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -10,10 +11,12 @@ public class Volumio {
 
     Logger logger = LoggerFactory.getLogger(Volumio.class);
 
-    public final String volumio_url = "http://hypex-amp.local/api/v1/commands/?";
+    @Value("${volumiodaemon.volumio_url}")
+    private String volumio_url;
 
     public void setVolume(int volume)
     {
+        logger.info(volumio_url);
         String call = volumio_url + "cmd=volume&volume=" + volume;
         logger.info("Setting volume in Volumio");
         RestTemplate rest = new RestTemplate();
