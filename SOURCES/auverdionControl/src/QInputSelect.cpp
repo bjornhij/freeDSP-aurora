@@ -7,6 +7,8 @@
 
 using namespace Vektorraum;
 
+extern void enableGui( bool enable );
+
 //==============================================================================
 /*!
  *
@@ -36,7 +38,7 @@ QInputSelect::QInputSelect( uint32_t selection, uint16_t inputaddr, CFreeDspAuro
   ui->comboBoxInput->addItem( "USB 6", 13 );
   ui->comboBoxInput->addItem( "USB 7", 14 );
   ui->comboBoxInput->addItem( "USB 8", 15 );
-  ui->comboBoxInput->setCurrentIndex( selection );
+  ui->comboBoxInput->setCurrentIndex( static_cast<int32_t>(selection) );
   ui->comboBoxInput->blockSignals( false );
   //ui->comboBoxInput->setMaxVisibleItems( 16 );
 
@@ -91,7 +93,7 @@ QInputSelect::QInputSelect( uint32_t selection,
   ui->comboBoxInput->addItem( "Expansion 8", 23 );
   ui->comboBoxInput->addItem( "SPDIF 1",     24 );
   ui->comboBoxInput->addItem( "SPDIF 2",     25 );
-  ui->comboBoxInput->setCurrentIndex( selection );
+  ui->comboBoxInput->setCurrentIndex( static_cast<int32_t>(selection) );
   ui->comboBoxInput->blockSignals( false );
   //ui->comboBoxInput->setMaxVisibleItems( 16 );
   
@@ -127,11 +129,20 @@ void QInputSelect::update( tvector<tfloat> f )
  */
 void QInputSelect::sendDspParameter( void )
 {
+  enableGui( false );
+
+  qDebug()<<"QInputSelect::sendDspParameter";
+
   if( dsp->getFirmwareVersion() != "1.0.0" )
   {
-    QByteArray content = getDspParams();
+    QByteArray content;
+    content.append( dsp->muteSequence() );
+    content.append( getDspParams() );
+    content.append( dsp->unmuteSequence() );
     dsp->sendParameterWifi( content );
   }
+
+  enableGui( true );
 }
 
 //==============================================================================
@@ -149,6 +160,7 @@ uint32_t QInputSelect::getNumBytes( void )
  */
 void QInputSelect::on_comboBoxInput_currentIndexChanged( int  )
 {
+  qDebug()<<"***on_comboBoxInput_currentIndexChanged";
   sendDspParameter();
   emit valueChanged();
 }
@@ -160,7 +172,7 @@ QByteArray QInputSelect::getUserParams( void )
 {
   QByteArray content;
   if( dsp->getFirmwareVersion() != "1.0.0" )
-    content.append( static_cast<uint8_t>(ui->comboBoxInput->currentIndex()) );
+    content.append( static_cast<char>(ui->comboBoxInput->currentIndex()) );
   return content;
 }
 
@@ -197,10 +209,12 @@ void QInputSelect::setUserParams( QByteArray& userParams, int& idx )
  */
 QByteArray QInputSelect::getDspParams( void )
 {
+  qDebug()<<"QInputSelect::getDspParam";
+
   QByteArray content;
 
-  if( dsp->getFirmwareVersion() != "1.0.0" )
-  {
+  //if( dsp->getFirmwareVersion() != "1.0.0" )
+  //{
     //--- Analog Inputs ---
     if( ui->comboBoxInput->currentText() == QString( "Analog 1" ) )
     {
@@ -214,7 +228,7 @@ QByteArray QInputSelect::getDspParams( void )
     }
     else if( ui->comboBoxInput->currentText() == QString( "Analog 3" ) )
     {
-      content.append( dsp->makeParameterForWifi( addr[kChannelADC], 0x00000001 ) );
+      content.append( dsp->makeParameterForWifi( addr[kChannelADC], 0x00000002 ) );
       content.append( dsp->makeParameterForWifi( addr[kSelectPort], kPortAnalog ) );
     }
     else if( ui->comboBoxInput->currentText() == QString( "Analog 4" ) )
@@ -332,12 +346,14 @@ QByteArray QInputSelect::getDspParams( void )
     {
       content.append( dsp->makeParameterForWifi( addr[kChannelSPDIF], 0x00000000 ) );
       content.append( dsp->makeParameterForWifi( addr[kSelectPort], kChannelSPDIF ) );
+      qDebug()<<"addr[kChannelSPDIF]"<<addr[kChannelSPDIF];
     }
     else if( ui->comboBoxInput->currentText() == QString( "SPDIF 2" ) )
     {
       content.append( dsp->makeParameterForWifi( addr[kChannelSPDIF], 0x00000001 ) );
       content.append( dsp->makeParameterForWifi( addr[kSelectPort], kChannelSPDIF ) );
+      qDebug()<<"addr[kChannelSPDIF]"<<addr[kChannelSPDIF];
     }
-  }
+  //}
   return content;
 }

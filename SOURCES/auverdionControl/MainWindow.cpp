@@ -10,9 +10,12 @@
 #include <QProgressDialog>
 #include <QJsonObject>
 #include <QJsonDocument>
+#include <QStatusBar>
 
 #include "MainWindow.hpp"
 #include "ui_MainWindow.h"
+
+#include "QSleeper.hpp"
 
 #include "DialogSettings.hpp"
 #include "QDialogDemoSelector.hpp"
@@ -28,7 +31,7 @@
 
 extern CLogFile myLog;
 
-#define VERSION_STR "1.0.0"
+#define VERSION_STR "1.1.1"
 #define FS 48000.0
 
 using namespace Vektorraum;
@@ -47,19 +50,43 @@ QColor colorPlot[kMaxPlotColors] = { QColor(  81, 158, 228 ),
                       };
 
 
-QVolumeSlider* sliderMainVolume;
+static QVolumeSlider* sliderMainVolume;
+static QString pathSettings;   
+static MainWindow* ptrMainWindow;
+static QStatusBar* ptrMainStatusBar;
 
-QString pathSettings;
+//==============================================================================
+/*!
+ */
+void setStatusBarMessage( QString str )
+{
+  ptrMainStatusBar->showMessage( str );
+}
 
+//==============================================================================
+/*!
+ */
+void enableGui( bool enable )
+{
+  ptrMainWindow->setEnabled( enable );
+}
+
+//==============================================================================
+/*!
+ */
 MainWindow::MainWindow( QWidget* parent ) :
   QMainWindow( parent ),
   ui( new Ui::MainWindow )
 {
+  ptrMainWindow = this;
+
   ui->setupUi(this);
   #if defined( __IOS__ ) || defined( __WIN__ ) || defined( __LINUX__ )
   ui->menuBar->hide();
   #endif
   ui->actionWrite_to_DSP->setEnabled( false );
+
+  ptrMainStatusBar = ui->statusBar;
   
   #if defined( __MACOSX__ )
   pathSettings = QString( "./settings.json" );
@@ -263,7 +290,7 @@ MainWindow::MainWindow( QWidget* parent ) :
 
       for( unsigned int chn = 0; chn < numChannels; chn++ )
       {
-        QAction* action = new QAction( "Show " + dspPlugin[ii]->getChannelName( chn ) );
+        QAction* action = new QAction( "    Show " + dspPlugin[ii]->getChannelName( chn ) );
         action->setCheckable( true );
         dspChannel.channel->actionsContextMenu.append( action );
         dspChannel.channel->contextMenu.addAction( action );
@@ -381,6 +408,7 @@ void MainWindow::updatePlots( void )
 void MainWindow::on_actionRead_from_DSP_triggered()
 {
   setEnabled( false );
+  dsp.setIsConnected( false );
 
   QTimer timerWait;
   connect( &timerWait, SIGNAL(timeout()), this, SLOT(updateWaitingForConnect()) );
@@ -398,329 +426,238 @@ void MainWindow::on_actionRead_from_DSP_triggered()
   //--- Request the firmware version
   //----------------------------------------------------------------------------
   ui->statusBar->showMessage("Reading firmware version.......");
-  dsp.requestFirmwareVersionWifi();
-
-  //----------------------------------------------------------------------------
-  //--- Request the AddOn-Id
-  //----------------------------------------------------------------------------
-  ui->statusBar->showMessage("Reading AddOn-Id.......");
-  dsp.requestAddOnIdWifi();
-
-  //----------------------------------------------------------------------------
-  //--- Request the DSP-plugin id
-  //----------------------------------------------------------------------------
-  ui->statusBar->showMessage("Reading PID.......");
-  uint32_t pid = dsp.requestPidWifi();
-  if( pid == 0 )
+  if( dsp.requestFirmwareVersionWifi( false ) )
   {
-    msgBox->accept();
-    return;
-  }
+    //--------------------------------------------------------------------------
+    //--- Request the AddOn-Id
+    //--------------------------------------------------------------------------
+    ui->statusBar->showMessage("Reading AddOn-Id.......");
+    dsp.requestAddOnIdWifi();
 
-  int preset = dsp.requestCurrentPresetWifi();
-  if( preset > -1 )
-  {
-    currentPreset = preset;
+    //--------------------------------------------------------------------------
+    //--- Request the DSP-plugin id
+    //--------------------------------------------------------------------------
+    ui->statusBar->showMessage("Reading PID.......");
+    uint32_t pid = dsp.requestPidWifi();
+    if( pid == 0 )
+    {
+      msgBox->accept();
+      return;
+    }
+
+    int preset = dsp.requestCurrentPresetWifi();
+    if( preset > -1 )
+    {
+      currentPreset = preset;
+      ui->tabPresets->blockSignals( true );
+      ui->tabPresets->setCurrentIndex( preset );
+      ui->tabPresets->blockSignals( false );
+    }
+
+    //--------------------------------------------------------------------------
+    //--- Delete old preset GUI
+    //--------------------------------------------------------------------------
+    for( int ii = 0; ii < NUMPRESETS; ii++ )
+    {
+      while( presets[ii]->tabChannels->count() )
+        delete presets[ii]->tabChannels->widget( presets[ii]->tabChannels->currentIndex() );
+    }
+
     ui->tabPresets->blockSignals( true );
-    ui->tabPresets->setCurrentIndex( preset );
+    while( ui->tabPresets->count() )
+      delete ui->tabPresets->widget( ui->tabPresets->currentIndex() );
     ui->tabPresets->blockSignals( false );
-  }
 
-  //----------------------------------------------------------------------------
-  //--- Delete old preset GUI
-  //----------------------------------------------------------------------------
-  for( int ii = 0; ii < NUMPRESETS; ii++ )
-  {
-    while( presets[ii]->tabChannels->count() )
-      delete presets[ii]->tabChannels->widget( presets[ii]->tabChannels->currentIndex() );
-  }
+    // \TODO Fix the crash when calling delete.
+    //delete dspPlugin;
 
-  ui->tabPresets->blockSignals( true );
-  while( ui->tabPresets->count() )
-    delete ui->tabPresets->widget( ui->tabPresets->currentIndex() );
-  ui->tabPresets->blockSignals( false );
-
-  // \TODO Fix the crash when calling delete.
-  //delete dspPlugin;
+    switchPluginGui( pid );
   
-  switch( pid )
-  {
-  case CFreeDspAurora::PLUGIN_8CHANNELS:
-    myLog()<<"Loading 8channels";
+    //--------------------------------------------------------------------------
+    //--- Request user parameters
+    //-------------------------------------------------------------------------- 
+    dsp.muteDAC();
+    QThread::msleep( 200 );
+   
+    ui->statusBar->showMessage("Reading user parameter.......");
+
+    for( int p = 0; p < NUMPRESETS; p++ )
+    {
+      dsp.mute();
+
+      QEventLoop loopWaitForReply;
+      QTimer timerWaitMute;
+      timerWaitMute.setSingleShot( true );
+      connect( &timerWaitMute, SIGNAL(timeout()), &loopWaitForReply, SLOT(quit()) );
+      timerWaitMute.start( 500 );
+      loopWaitForReply.exec();
+
+      dsp.selectPresetWifi( p );
+      QByteArray userparams;
+      if( dsp.requestUserParameterWifi( userparams ) )
+      {
+        updatePresetGui( p, userparams );
+        presetUserParams[p] = userparams;
+      }
+      dspPlugin[p]->setMasterVolume( ui->volumeSliderMain->value(), false );
+      qDebug()<<"Preset Master Volume:"<<dspPlugin[p]->getMasterVolume();
+    }
+
+    currentPreset = preset;
+
+    dsp.mute();
+  
+    QEventLoop loopWaitForReply;
+    QTimer timerWaitMute;
+    timerWaitMute.setSingleShot( true );
+    connect( &timerWaitMute, SIGNAL(timeout()), &loopWaitForReply, SLOT(quit()) );
+    timerWaitMute.start( 500 );
+    loopWaitForReply.exec();
+
+    dsp.selectPresetWifi( preset );
+    dsp.setMasterVolume( static_cast<float>(dspPlugin[currentPreset]->getMasterVolume()) );
 
     ui->tabPresets->blockSignals( true );
-    for( int ii = 0; ii < 4; ii++ )
-    {
-      presets[ii] = new QPreset;
-      if( ii == 0 )
-        ui->tabPresets->addTab( presets[ii], "Preset A" );
-      else if( ii == 1 )
-        ui->tabPresets->addTab( presets[ii], "Preset B" );  
-      else if( ii == 2 )
-        ui->tabPresets->addTab( presets[ii], "Preset C" ); 
-      else if( ii == 3 )
-        ui->tabPresets->addTab( presets[ii], "Preset D" ); 
+    ui->tabPresets->setCurrentIndex( currentPreset );
+    ui->tabPresets->blockSignals( false );  
 
-      presets[ii]->tabChannels->removeTab( 0 );
+    updatePlots();
 
-      dspPlugin[ii] = new CPlugIn8Channels( FS );
-      numChannels = dspPlugin[ii]->getNumChannels();
-      for( unsigned int n = 0; n < numChannels; n++ )
-      {
-        tDspChannel dspChannel = dspPlugin[ii]->getGuiForChannel( n, FS, &dsp, this );
+    dsp.unmuteDAC();
 
-        presets[ii]->tabChannels->addTab( dspChannel.channel, "" );
-        QLabel* lbl1 = new QLabel( presets[ii]->tabChannels );
-        lbl1->setText( dspChannel.name );
-        lbl1->setStyleSheet( QString("background-color: transparent; border: 0px solid black; border-left: 2px solid ") + colorPlot[n%kMaxPlotColors].name() + QString("; color: white; ") );
-        lbl1->setFixedWidth( 100 );
-        presets[ii]->tabChannels->tabBar()->setTabButton( static_cast<int>(n), QTabBar::LeftSide, lbl1 );
-
-        dspChannel.layout->setSpacing( 0 );
-        dspChannel.layout->setMargin( 0 );
-        dspChannel.layout->setContentsMargins( 0, 0, 0, 0 );
-        dspChannel.layout->setAlignment( Qt::AlignLeft );
-
-        dspChannel.channel->widgetChannel->setLayout( dspChannel.layout );
-
-        for( unsigned int chn = 0; chn < numChannels; chn++ )
-        {
-          QAction* action = new QAction( "Show " + dspPlugin[ii]->getChannelName( chn ) );
-          action->setCheckable( true );
-          dspChannel.channel->actionsContextMenu.append( action );
-          dspChannel.channel->contextMenu.addAction( action );
-        }
-        dspChannel.channel->actionsContextMenu.at(static_cast<int>(n))->setChecked( true );
-        connect( dspChannel.channel, SIGNAL(selectionChanged()), this, SLOT(updatePlots()) );
-      }
-    }
-    ui->tabPresets->blockSignals( false );
-    break;
-
-  case CFreeDspAurora::PLUGIN_HOMECINEMA71:
-    myLog()<<"Loading HomeCinema71";
-
-    ui->tabPresets->blockSignals( true );
-    for( int ii = 0; ii < 4; ii++ )
-    {
-      presets[ii] = new QPreset;
-      if( ii == 0 )
-        ui->tabPresets->addTab( presets[ii], "Preset A" );
-      else if( ii == 1 )
-        ui->tabPresets->addTab( presets[ii], "Preset B" );  
-      else if( ii == 2 )
-        ui->tabPresets->addTab( presets[ii], "Preset C" ); 
-      else if( ii == 3 )
-        ui->tabPresets->addTab( presets[ii], "Preset D" ); 
-
-      presets[ii]->tabChannels->removeTab( 0 );
-
-      dspPlugin[ii] = new CPlugInHomeCinema71( FS );
-      numChannels = dspPlugin[ii]->getNumChannels();
-      for( unsigned int n = 0; n < numChannels; n++ )
-      {
-        tDspChannel dspChannel = dspPlugin[ii]->getGuiForChannel( n, FS, &dsp, this );
-
-        presets[ii]->tabChannels->addTab( dspChannel.channel, "" );
-        QLabel* lbl1 = new QLabel( presets[ii]->tabChannels );
-        lbl1->setText( dspChannel.name );
-        lbl1->setStyleSheet( QString("background-color: transparent; border: 0px solid black; border-left: 2px solid ") + colorPlot[n%kMaxPlotColors].name() + QString("; color: white; ") );
-        lbl1->setFixedWidth( 100 );
-        presets[ii]->tabChannels->tabBar()->setTabButton( static_cast<int>(n), QTabBar::LeftSide, lbl1 );
-
-        dspChannel.layout->setSpacing( 0 );
-        dspChannel.layout->setMargin( 0 );
-        dspChannel.layout->setContentsMargins( 0, 0, 0, 0 );
-        dspChannel.layout->setAlignment( Qt::AlignLeft );
-
-        dspChannel.channel->widgetChannel->setLayout( dspChannel.layout );
-
-        for( unsigned int chn = 0; chn < numChannels; chn++ )
-        {
-          QAction* action = new QAction( "Show " + dspPlugin[ii]->getChannelName( chn ) );
-          action->setCheckable( true );
-          dspChannel.channel->actionsContextMenu.append( action );
-          dspChannel.channel->contextMenu.addAction( action );
-        }
-        dspChannel.channel->actionsContextMenu.at(static_cast<int>(n))->setChecked( true );
-        connect( dspChannel.channel, SIGNAL(selectionChanged()), this, SLOT(updatePlots()) );
-      }
-    }
-    ui->tabPresets->blockSignals( false );
-    break;
-
-  case CFreeDspAurora::PLUGIN_8CHANNELS_USB:
-    myLog()<<"Loading 8channelsUSB";
-
-    ui->tabPresets->blockSignals( true );
-    for( int ii = 0; ii < 4; ii++ )
-    {
-      presets[ii] = new QPreset;
-      if( ii == 0 )
-        ui->tabPresets->addTab( presets[ii], "Preset A" );
-      else if( ii == 1 )
-        ui->tabPresets->addTab( presets[ii], "Preset B" );  
-      else if( ii == 2 )
-        ui->tabPresets->addTab( presets[ii], "Preset C" ); 
-      else if( ii == 3 )
-        ui->tabPresets->addTab( presets[ii], "Preset D" ); 
-
-      presets[ii]->tabChannels->removeTab( 0 );
-
-      dspPlugin[ii] = new CPlugIn8ChannelsUSB( FS );
-      numChannels = dspPlugin[ii]->getNumChannels();
-      for( unsigned int n = 0; n < numChannels; n++ )
-      {
-        tDspChannel dspChannel = dspPlugin[ii]->getGuiForChannel( n, FS, &dsp, this );
-
-        presets[ii]->tabChannels->addTab( dspChannel.channel, "" );
-        QLabel* lbl1 = new QLabel( presets[ii]->tabChannels );
-        lbl1->setText( dspChannel.name );
-        lbl1->setStyleSheet( QString("background-color: transparent; border: 0px solid black; border-left: 2px solid ") + colorPlot[n%kMaxPlotColors].name() + QString("; color: white; ") );
-        lbl1->setFixedWidth( 100 );
-        presets[ii]->tabChannels->tabBar()->setTabButton( static_cast<int>(n), QTabBar::LeftSide, lbl1 );
-
-        dspChannel.layout->setSpacing( 0 );
-        dspChannel.layout->setMargin( 0 );
-        dspChannel.layout->setContentsMargins( 0, 0, 0, 0 );
-        dspChannel.layout->setAlignment( Qt::AlignLeft );
-
-        dspChannel.channel->widgetChannel->setLayout( dspChannel.layout );
-
-        for( unsigned int chn = 0; chn < numChannels; chn++ )
-        {
-          QAction* action = new QAction( "Show " + dspPlugin[ii]->getChannelName( chn ) );
-          action->setCheckable( true );
-          dspChannel.channel->actionsContextMenu.append( action );
-          dspChannel.channel->contextMenu.addAction( action );
-        }
-        dspChannel.channel->actionsContextMenu.at(static_cast<int>(n))->setChecked( true );
-        connect( dspChannel.channel, SIGNAL(selectionChanged()), this, SLOT(updatePlots()) );
-      }
-    }
-    ui->tabPresets->blockSignals( false );
-    break;
-
-  case CFreeDspAurora::PLUGIN_HOMECINEMA71_USB:
-    myLog()<<"Loading HomeCinema71 USB";
-
-    ui->tabPresets->blockSignals( true );
-    for( int ii = 0; ii < 4; ii++ )
-    {
-      presets[ii] = new QPreset;
-      if( ii == 0 )
-        ui->tabPresets->addTab( presets[ii], "Preset A" );
-      else if( ii == 1 )
-        ui->tabPresets->addTab( presets[ii], "Preset B" );  
-      else if( ii == 2 )
-        ui->tabPresets->addTab( presets[ii], "Preset C" ); 
-      else if( ii == 3 )
-        ui->tabPresets->addTab( presets[ii], "Preset D" ); 
-
-      presets[ii]->tabChannels->removeTab( 0 );
-
-      dspPlugin[ii] = new CPlugInHomeCinema71USB( FS );
-      numChannels = dspPlugin[ii]->getNumChannels();
-      for( unsigned int n = 0; n < numChannels; n++ )
-      {
-        tDspChannel dspChannel = dspPlugin[ii]->getGuiForChannel( n, FS, &dsp, this );
-
-        presets[ii]->tabChannels->addTab( dspChannel.channel, "" );
-        QLabel* lbl1 = new QLabel( presets[ii]->tabChannels );
-        lbl1->setText( dspChannel.name );
-        lbl1->setStyleSheet( QString("background-color: transparent; border: 0px solid black; border-left: 2px solid ") + colorPlot[n%kMaxPlotColors].name() + QString("; color: white; ") );
-        lbl1->setFixedWidth( 100 );
-        presets[ii]->tabChannels->tabBar()->setTabButton( static_cast<int>(n), QTabBar::LeftSide, lbl1 );
-
-        dspChannel.layout->setSpacing( 0 );
-        dspChannel.layout->setMargin( 0 );
-        dspChannel.layout->setContentsMargins( 0, 0, 0, 0 );
-        dspChannel.layout->setAlignment( Qt::AlignLeft );
-
-        dspChannel.channel->widgetChannel->setLayout( dspChannel.layout );
-
-        for( unsigned int chn = 0; chn < numChannels; chn++ )
-        {
-          QAction* action = new QAction( "Show " + dspPlugin[ii]->getChannelName( chn ) );
-          action->setCheckable( true );
-          dspChannel.channel->actionsContextMenu.append( action );
-          dspChannel.channel->contextMenu.addAction( action );
-        }
-        dspChannel.channel->actionsContextMenu.at(static_cast<int>(n))->setChecked( true );
-        connect( dspChannel.channel, SIGNAL(selectionChanged()), this, SLOT(updatePlots()) );
-      }
-    }
-    ui->tabPresets->blockSignals( false );
-    break;
-
-  case 0:
     setEnabled( true );
     disconnect( &timerWait, SIGNAL(timeout()), this, SLOT(updateWaitingForConnect()) );
+    currentWaitRotation = 0;
+    //rotateIconConnect( currentWaitRotation );
     msgBox->accept();
-    QMessageBox::warning( this, tr("Warning"), tr("It seems that there is no plugin installed. Please install a valid plugin on your board."), QMessageBox::Ok ); 
     ui->statusBar->showMessage("Ready");
-    return;
+    ui->actionWrite_to_DSP->setEnabled( true );
 
-  default:
-    qDebug()<<"Unkown plugin"<<pid;
-    setEnabled( true );
-    disconnect( &timerWait, SIGNAL(timeout()), this, SLOT(updateWaitingForConnect()) );
-    msgBox->accept();
-    QMessageBox::critical( this, tr("Error"), tr("Your DSP reports an unkown PID. Please reinstall a valid plugin on your board."), QMessageBox::Ok ); 
-    ui->statusBar->showMessage("Ready");
-    return;
-  }
-
-  //----------------------------------------------------------------------------
-  //--- Request user parameters
-  //----------------------------------------------------------------------------
-  ui->statusBar->showMessage("Reading user parameter.......");
-
-  for( unsigned int p = 0; p < NUMPRESETS; p++ )
-  {
-    dsp.selectPresetWifi( p );
-    QByteArray userparams;
-    if( dsp.requestUserParameterWifi( userparams ) )
+    myLog()<<"Fw Version: "<<dsp.getFwVersion();
+    if( dsp.getFwVersion() < 0x010101 )
     {
-      updatePresetGui( p, userparams );
-      presetUserParams[p] = userparams;
+      if( !jsonObjSettings["msg0003"].toBool() )
+      {
+        DialogReleaseNotes dlg( this );
+        dlg.setWindowTitle( "Release Note" );
+        dlg.setReleaseNote( QString( "There is a new firmware available for your Aurora DSP!\n" )
+                          + QString( "This fixes an issue with corrupted files on your board after a firmware update.\n" ) );
+        int result = dlg.exec();
+        if( result == QDialog::Accepted )
+        {
+          if( dlg.getDontShowAgain() )
+          {
+            jsonObjSettings["msg0003"] = true;
+            writeSettings();
+          }
+        }
+      }
+    }
+    else if( dsp.getFwVersion() < 0x010100 )
+    {
+      if( !jsonObjSettings["msg0002"].toBool() )
+      {
+        DialogReleaseNotes dlg( this );
+        dlg.setWindowTitle( "Release Note" );
+        dlg.setReleaseNote( QString( "There is a new firmware available for your Aurora DSP!\n" )
+                          + QString( "New features and changes are:\n" )
+                          + QString( "- Full support of AddOnB (S/P-DIF multiplexer)\n" )
+                          + QString( "- DAC mute function\n" )
+                          + QString( "- New webOTA interface for future firmware updates\n" )
+                          + QString( "Please download the latest firmware and install it.\nIn the user manual (UserManual.pdf) you will find instructions how to update the firmware." ) );
+        int result = dlg.exec();
+        if( result == QDialog::Accepted )
+        {
+          if( dlg.getDontShowAgain() )
+          {
+            jsonObjSettings["msg0002"] = true;
+            writeSettings();
+          }
+        }
+      }
+    }
+    else if( !jsonObjSettings["msg0001"].toBool() )
+    {
+      if( dsp.getFirmwareVersion() == "1.0.0" )
+      {
+        DialogReleaseNotes dlg( this );
+        dlg.setWindowTitle( "Hotfix available" );
+        dlg.setReleaseNote( "There is a new hotfix available for your aurora!\nPlease download the latest firmware and install it.\nIn the user manual (UserManual.pdf) you will find instructions how to update the firmware." );
+        int result = dlg.exec();
+        if( result == QDialog::Accepted )
+        {
+          if( dlg.getDontShowAgain() )
+          {
+            jsonObjSettings["msg0001"] = true;
+            writeSettings();
+          }
+        }
+      }
+    }
+    
+  }
+  else
+  {
+    msgBox->accept();
+    QMessageBox msgQuestion;
+    msgQuestion.setText( tr("There is no DSP responding. Do you want to run auverdionControl in offline mode?") );
+    //msgQuestion.setInformativeText("Do you want to save your changes?");
+    msgQuestion.setStandardButtons( QMessageBox::Yes | QMessageBox::No );
+    msgQuestion.setDefaultButton( QMessageBox::Yes );
+    int ret = msgQuestion.exec();
+
+    QStringList itemList( {"8channels", "Home Cinema 7.1"} );
+    QDialogDemoSelector dialog( "Please select the plugin for offline mode: ", itemList );
+    switch (ret)
+    {
+    case QMessageBox::Yes:
+      myLog()<<"Demo mode selected";
+      if( dialog.exec() == QDialog::Accepted )
+      {
+        for( int ii = 0; ii < NUMPRESETS; ii++ )
+        {
+          while( presets[ii]->tabChannels->count() )
+            delete presets[ii]->tabChannels->widget( presets[ii]->tabChannels->currentIndex() );
+        }
+
+        ui->tabPresets->blockSignals( true );
+        while( ui->tabPresets->count() )
+          delete ui->tabPresets->widget( ui->tabPresets->currentIndex() );
+        ui->tabPresets->blockSignals( false );
+
+        if( dialog.comboBox()->currentText() == QString("8channels") )
+          switchPluginGui( CFreeDspAurora::PLUGIN_8CHANNELS );
+        else if( dialog.comboBox()->currentText() == QString("Home Cinema 7.1") )
+          switchPluginGui( CFreeDspAurora::PLUGIN_HOMECINEMA71 );
+
+        for( int p = 0; p < NUMPRESETS; p++ )
+        {
+          dsp.selectPresetWifi( p );
+          QByteArray userparams;
+          if( dsp.requestUserParameterWifi( userparams ) )
+          {
+            updatePresetGui( p, userparams );
+            presetUserParams[p] = userparams;
+          }
+          dspPlugin[p]->setMasterVolume( ui->volumeSliderMain->value(), false );
+          qDebug()<<"Preset Master Volume:"<<dspPlugin[p]->getMasterVolume();
+        }
+
+        updatePlots();
+      }
+      ui->statusBar->showMessage("Ready");
+      ui->actionWrite_to_DSP->setEnabled( true );
+      break;
+    case QMessageBox::No:
+      myLog()<<"Abort";
+      ui->statusBar->showMessage("Ready");
+      break;
+    default:
+      break;
     }
   }
-
-  currentPreset = preset;
-  dsp.selectPresetWifi( preset );
-  ui->tabPresets->blockSignals( true );
-  ui->tabPresets->setCurrentIndex( currentPreset );
-  ui->tabPresets->blockSignals( false );  
-
-  updatePlots();
-
   setEnabled( true );
   disconnect( &timerWait, SIGNAL(timeout()), this, SLOT(updateWaitingForConnect()) );
-  currentWaitRotation = 0;
-  //rotateIconConnect( currentWaitRotation );
-  msgBox->accept();
-  ui->statusBar->showMessage("Ready");
-  ui->actionWrite_to_DSP->setEnabled( true );
-
-  if( !jsonObjSettings["msg0001"].toBool() )
-  {
-    if( dsp.getFirmwareVersion() == "1.0.0" )
-    {
-      DialogReleaseNotes dlg( this );
-      dlg.setWindowTitle( "Hotfix available" );
-      dlg.setReleaseNote( "There is a new hotfix available for your aurora!\nPlease download the latest firmware and install it.\nIn the user manual (UserManual.pdf) you will find instructions how to update the firmware." );
-      int result = dlg.exec();
-      if( result == QDialog::Accepted )
-      {
-        if( dlg.getDontShowAgain() )
-        {
-          jsonObjSettings["msg0001"] = true;
-          writeSettings();
-        }
-      }
-    }
-  }
 }
 
 //==============================================================================
@@ -815,8 +752,20 @@ void MainWindow::on_actionWrite_to_DSP_triggered()
   progress.setWindowModality(Qt::WindowModal);
   int progressValue = 0;
 
+  dsp.muteDAC();
+  QThread::msleep( 200 );
+
   for( int p = 0; p < NUMPRESETS; p++ )
   {
+    dsp.mute();
+  
+    QEventLoop loopWaitForReply;
+    QTimer timerWaitMute;
+    timerWaitMute.setSingleShot( true );
+    connect( &timerWaitMute, SIGNAL(timeout()), &loopWaitForReply, SLOT(quit()) );
+    timerWaitMute.start( 500 );
+    loopWaitForReply.exec();
+
     dsp.selectPresetWifi( p );
 
     //----------------------------------------------------------------------------
@@ -889,10 +838,12 @@ void MainWindow::on_actionWrite_to_DSP_triggered()
   dsp.storePresetSelection();
 
   myLog()<<"Success";
-  qDebug()<<"File size dspparam.hex:"<<dspparams[0].size() / 1024<<"KiB";
-  qDebug()<<"File size usrparam.hex:"<<usrparams[0].size() / 1024<<"KiB";
+  //qDebug()<<"File size dspparam.hex:"<<dspparams[0].size() / 1024<<"KiB";
+  //qDebug()<<"File size usrparam.hex:"<<usrparams[0].size() / 1024<<"KiB";
 
   QMessageBox::information( this, tr("Success"), tr("You have successfully stored your settings!"), QMessageBox::Ok );
+
+  dsp.unmuteDAC();
 
 }
 
@@ -961,10 +912,32 @@ void MainWindow::on_actionSettings_triggered()
   int result = dialog.exec();
   if( result == QDialog::Accepted )
   { 
+    enableGui( false );
     jsonObjSettings[ "network" ] = dsp.getConnectionTypeWifi();
     jsonObjSettings[ "ssid" ] = dsp.getSsidWifi();
     jsonObjSettings[ "ip" ] = dsp.getIpAddressLocalWifi();
     writeSettings();
+
+    if( dsp.getAddOnId() == DialogSettings::ADDONB )
+    {
+      if( dialog.getSpdifInput() == 0x00 )
+        dsp.sendAddOnConfig( "820104" );
+      else if( dialog.getSpdifInput() == 0x01 )
+        dsp.sendAddOnConfig( "820105" );
+      else if( dialog.getSpdifInput() == 0x02 )
+        dsp.sendAddOnConfig( "820106" );
+      else if( dialog.getSpdifInput() == 0x03 )
+        dsp.sendAddOnConfig( "820107" );
+      else if( dialog.getSpdifInput() == 0x04 )
+        dsp.sendAddOnConfig( "820100" );
+      else if( dialog.getSpdifInput() == 0x05 )
+        dsp.sendAddOnConfig( "820101" );
+      else if( dialog.getSpdifInput() == 0x06 )
+        dsp.sendAddOnConfig( "820102" );
+      else if( dialog.getSpdifInput() == 0x07 )
+        dsp.sendAddOnConfig( "820103" );
+    }
+    enableGui( true );
   }
 }
 
@@ -1072,20 +1045,45 @@ void MainWindow::rotateIconConnect( int rotation )
  */
 void MainWindow::on_tabPresets_currentChanged( int index )
 {
-  if( (index >= 0) && (index < 4) )
+  if( (index >= 0) && (index < NUMPRESETS) )
   {
     ui->statusBar->showMessage("Switching preset.......");
+    enableGui( false );
+
+    dsp.muteDAC();
+    QThread::msleep( 200 );
 
     msgBox = new QMessageBox( QMessageBox::Information, tr("Waiting"), tr("Switching preset..."), QMessageBox::Cancel, this );
     msgBox->setStandardButtons( nullptr );
     msgBox->open();
 
+    //dspPlugin[currentPreset]->setMasterVolume( -120, true );
+
+    //dsp.mute();
+
+    QEventLoop loopWaitForReply;
+    QTimer timerWait;
+    timerWait.setSingleShot( true );
+    connect( &timerWait, SIGNAL(timeout()), &loopWaitForReply, SLOT(quit()) );
+    timerWait.start( 500 );
+    loopWaitForReply.exec();
+
     updatePresetGui( currentPreset, presetUserParams[currentPreset] );
     currentPreset = index;
     updatePlots();
+
+    qDebug()<<"Master Volume"<<dspPlugin[currentPreset]->getMasterVolume();
+
+    //dspPlugin[currentPreset]->setMasterVolume( ui->volumeSliderMain->value(), false );
+
     dsp.selectPresetWifi( index );
+    dsp.setMasterVolume( static_cast<float>(dspPlugin[currentPreset]->getMasterVolume()) );
 
     msgBox->accept();
+
+    dsp.unmuteDAC();
+    
+    enableGui( true );
     ui->statusBar->showMessage("Ready");
   }
 }
@@ -1105,4 +1103,236 @@ void MainWindow::writeSettings( void )
   }
   fileSettings.write( jsonDoc.toJson() );
   fileSettings.close();
+}
+
+//==============================================================================
+/*!
+ */
+void MainWindow::switchPluginGui( uint32_t pid )
+{
+switch( pid )
+  {
+  case CFreeDspAurora::PLUGIN_8CHANNELS:
+    myLog()<<"Loading 8channels";
+
+    ui->tabPresets->blockSignals( true );
+    for( int ii = 0; ii < 4; ii++ )
+    {
+      presets[ii] = new QPreset;
+      if( ii == 0 )
+        ui->tabPresets->addTab( presets[ii], "Preset A" );
+      else if( ii == 1 )
+        ui->tabPresets->addTab( presets[ii], "Preset B" );  
+      else if( ii == 2 )
+        ui->tabPresets->addTab( presets[ii], "Preset C" ); 
+      else if( ii == 3 )
+        ui->tabPresets->addTab( presets[ii], "Preset D" ); 
+
+      presets[ii]->tabChannels->removeTab( 0 );
+
+      dspPlugin[ii] = new CPlugIn8Channels( FS );
+      numChannels = dspPlugin[ii]->getNumChannels();
+      for( unsigned int n = 0; n < numChannels; n++ )
+      {
+        tDspChannel dspChannel = dspPlugin[ii]->getGuiForChannel( n, FS, &dsp, this );
+
+        presets[ii]->tabChannels->addTab( dspChannel.channel, "" );
+        QLabel* lbl1 = new QLabel( presets[ii]->tabChannels );
+        lbl1->setText( dspChannel.name );
+        lbl1->setStyleSheet( QString("background-color: transparent; border: 0px solid black; border-left: 2px solid ") + colorPlot[n%kMaxPlotColors].name() + QString("; color: white; ") );
+        lbl1->setFixedWidth( 100 );
+        presets[ii]->tabChannels->tabBar()->setTabButton( static_cast<int>(n), QTabBar::LeftSide, lbl1 );
+
+        dspChannel.layout->setSpacing( 0 );
+        dspChannel.layout->setMargin( 0 );
+        dspChannel.layout->setContentsMargins( 0, 0, 0, 0 );
+        dspChannel.layout->setAlignment( Qt::AlignLeft );
+
+        dspChannel.channel->widgetChannel->setLayout( dspChannel.layout );
+
+        for( unsigned int chn = 0; chn < numChannels; chn++ )
+        {
+          QAction* action = new QAction( "    Show " + dspPlugin[ii]->getChannelName( chn ) );
+          action->setCheckable( true );
+          dspChannel.channel->actionsContextMenu.append( action );
+          dspChannel.channel->contextMenu.addAction( action );
+        }
+        dspChannel.channel->actionsContextMenu.at(static_cast<int>(n))->setChecked( true );
+        connect( dspChannel.channel, SIGNAL(selectionChanged()), this, SLOT(updatePlots()) );
+      }
+    }
+    ui->tabPresets->blockSignals( false );
+    break;
+
+  case CFreeDspAurora::PLUGIN_HOMECINEMA71:
+    myLog()<<"Loading HomeCinema71";
+
+    ui->tabPresets->blockSignals( true );
+    for( int ii = 0; ii < 4; ii++ )
+    {
+      presets[ii] = new QPreset;
+      if( ii == 0 )
+        ui->tabPresets->addTab( presets[ii], "Preset A" );
+      else if( ii == 1 )
+        ui->tabPresets->addTab( presets[ii], "Preset B" );  
+      else if( ii == 2 )
+        ui->tabPresets->addTab( presets[ii], "Preset C" ); 
+      else if( ii == 3 )
+        ui->tabPresets->addTab( presets[ii], "Preset D" ); 
+
+      presets[ii]->tabChannels->removeTab( 0 );
+
+      dspPlugin[ii] = new CPlugInHomeCinema71( FS );
+      numChannels = dspPlugin[ii]->getNumChannels();
+      for( unsigned int n = 0; n < numChannels; n++ )
+      {
+        tDspChannel dspChannel = dspPlugin[ii]->getGuiForChannel( n, FS, &dsp, this );
+
+        presets[ii]->tabChannels->addTab( dspChannel.channel, "" );
+        QLabel* lbl1 = new QLabel( presets[ii]->tabChannels );
+        lbl1->setText( dspChannel.name );
+        lbl1->setStyleSheet( QString("background-color: transparent; border: 0px solid black; border-left: 2px solid ") + colorPlot[n%kMaxPlotColors].name() + QString("; color: white; ") );
+        lbl1->setFixedWidth( 100 );
+        presets[ii]->tabChannels->tabBar()->setTabButton( static_cast<int>(n), QTabBar::LeftSide, lbl1 );
+
+        dspChannel.layout->setSpacing( 0 );
+        dspChannel.layout->setMargin( 0 );
+        dspChannel.layout->setContentsMargins( 0, 0, 0, 0 );
+        dspChannel.layout->setAlignment( Qt::AlignLeft );
+
+        dspChannel.channel->widgetChannel->setLayout( dspChannel.layout );
+
+        for( unsigned int chn = 0; chn < numChannels; chn++ )
+        {
+          QAction* action = new QAction( "    Show " + dspPlugin[ii]->getChannelName( chn ) );
+          action->setCheckable( true );
+          dspChannel.channel->actionsContextMenu.append( action );
+          dspChannel.channel->contextMenu.addAction( action );
+        }
+        dspChannel.channel->actionsContextMenu.at(static_cast<int>(n))->setChecked( true );
+        connect( dspChannel.channel, SIGNAL(selectionChanged()), this, SLOT(updatePlots()) );
+      }
+    }
+    ui->tabPresets->blockSignals( false );
+    break;
+
+  case CFreeDspAurora::PLUGIN_8CHANNELS_USB:
+    myLog()<<"Loading 8channelsUSB";
+
+    ui->tabPresets->blockSignals( true );
+    for( int ii = 0; ii < 4; ii++ )
+    {
+      presets[ii] = new QPreset;
+      if( ii == 0 )
+        ui->tabPresets->addTab( presets[ii], "Preset A" );
+      else if( ii == 1 )
+        ui->tabPresets->addTab( presets[ii], "Preset B" );  
+      else if( ii == 2 )
+        ui->tabPresets->addTab( presets[ii], "Preset C" ); 
+      else if( ii == 3 )
+        ui->tabPresets->addTab( presets[ii], "Preset D" ); 
+
+      presets[ii]->tabChannels->removeTab( 0 );
+
+      dspPlugin[ii] = new CPlugIn8ChannelsUSB( FS );
+      numChannels = dspPlugin[ii]->getNumChannels();
+      for( unsigned int n = 0; n < numChannels; n++ )
+      {
+        tDspChannel dspChannel = dspPlugin[ii]->getGuiForChannel( n, FS, &dsp, this );
+
+        presets[ii]->tabChannels->addTab( dspChannel.channel, "" );
+        QLabel* lbl1 = new QLabel( presets[ii]->tabChannels );
+        lbl1->setText( dspChannel.name );
+        lbl1->setStyleSheet( QString("background-color: transparent; border: 0px solid black; border-left: 2px solid ") + colorPlot[n%kMaxPlotColors].name() + QString("; color: white; ") );
+        lbl1->setFixedWidth( 100 );
+        presets[ii]->tabChannels->tabBar()->setTabButton( static_cast<int>(n), QTabBar::LeftSide, lbl1 );
+
+        dspChannel.layout->setSpacing( 0 );
+        dspChannel.layout->setMargin( 0 );
+        dspChannel.layout->setContentsMargins( 0, 0, 0, 0 );
+        dspChannel.layout->setAlignment( Qt::AlignLeft );
+
+        dspChannel.channel->widgetChannel->setLayout( dspChannel.layout );
+
+        for( unsigned int chn = 0; chn < numChannels; chn++ )
+        {
+          QAction* action = new QAction( "    Show " + dspPlugin[ii]->getChannelName( chn ) );
+          action->setCheckable( true );
+          dspChannel.channel->actionsContextMenu.append( action );
+          dspChannel.channel->contextMenu.addAction( action );
+        }
+        dspChannel.channel->actionsContextMenu.at(static_cast<int>(n))->setChecked( true );
+        connect( dspChannel.channel, SIGNAL(selectionChanged()), this, SLOT(updatePlots()) );
+      }
+    }
+    ui->tabPresets->blockSignals( false );
+    break;
+
+  case CFreeDspAurora::PLUGIN_HOMECINEMA71_USB:
+    myLog()<<"Loading HomeCinema71 USB";
+
+    ui->tabPresets->blockSignals( true );
+    for( int ii = 0; ii < 4; ii++ )
+    {
+      presets[ii] = new QPreset;
+      if( ii == 0 )
+        ui->tabPresets->addTab( presets[ii], "Preset A" );
+      else if( ii == 1 )
+        ui->tabPresets->addTab( presets[ii], "Preset B" );  
+      else if( ii == 2 )
+        ui->tabPresets->addTab( presets[ii], "Preset C" ); 
+      else if( ii == 3 )
+        ui->tabPresets->addTab( presets[ii], "Preset D" ); 
+
+      presets[ii]->tabChannels->removeTab( 0 );
+
+      dspPlugin[ii] = new CPlugInHomeCinema71USB( FS );
+      numChannels = dspPlugin[ii]->getNumChannels();
+      for( unsigned int n = 0; n < numChannels; n++ )
+      {
+        tDspChannel dspChannel = dspPlugin[ii]->getGuiForChannel( n, FS, &dsp, this );
+
+        presets[ii]->tabChannels->addTab( dspChannel.channel, "" );
+        QLabel* lbl1 = new QLabel( presets[ii]->tabChannels );
+        lbl1->setText( dspChannel.name );
+        lbl1->setStyleSheet( QString("background-color: transparent; border: 0px solid black; border-left: 2px solid ") + colorPlot[n%kMaxPlotColors].name() + QString("; color: white; ") );
+        lbl1->setFixedWidth( 100 );
+        presets[ii]->tabChannels->tabBar()->setTabButton( static_cast<int>(n), QTabBar::LeftSide, lbl1 );
+
+        dspChannel.layout->setSpacing( 0 );
+        dspChannel.layout->setMargin( 0 );
+        dspChannel.layout->setContentsMargins( 0, 0, 0, 0 );
+        dspChannel.layout->setAlignment( Qt::AlignLeft );
+
+        dspChannel.channel->widgetChannel->setLayout( dspChannel.layout );
+
+        for( unsigned int chn = 0; chn < numChannels; chn++ )
+        {
+          QAction* action = new QAction( "    Show " + dspPlugin[ii]->getChannelName( chn ) );
+          action->setCheckable( true );
+          dspChannel.channel->actionsContextMenu.append( action );
+          dspChannel.channel->contextMenu.addAction( action );
+        }
+        dspChannel.channel->actionsContextMenu.at(static_cast<int>(n))->setChecked( true );
+        connect( dspChannel.channel, SIGNAL(selectionChanged()), this, SLOT(updatePlots()) );
+      }
+    }
+    ui->tabPresets->blockSignals( false );
+    break;
+
+  case 0:
+    setEnabled( true );
+    msgBox->accept();
+    QMessageBox::warning( this, tr("Warning"), tr("It seems that there is no plugin installed. Please install a valid plugin on your board."), QMessageBox::Ok ); 
+    ui->statusBar->showMessage("Ready");
+    return;
+
+  default:
+    qDebug()<<"Unkown plugin"<<pid;
+    setEnabled( true );
+    msgBox->accept();
+    QMessageBox::critical( this, tr("Error"), tr("Your DSP reports an unkown PID. Please reinstall a valid plugin on your board."), QMessageBox::Ok ); 
+    ui->statusBar->showMessage("Ready");
+    return;
+  }
 }

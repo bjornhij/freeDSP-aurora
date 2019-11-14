@@ -4,8 +4,11 @@
 #include "ui_QHighPass.h"
 
 #include "vektorraum.h"
+#include "QSleeper.hpp"
 
 using namespace Vektorraum;
+
+extern void enableGui( bool enable );
 
 //==============================================================================
 /*!
@@ -883,6 +886,10 @@ void QHighPass::sendDspParameter( void )
 {
   QByteArray content;
 
+  enableGui( false );
+
+  content.append( dsp->muteSequence() );
+
   content.append( dsp->makeParameterForWifi( addr[kParamB2_1], static_cast<float>(coeffs[kB2]) ) );
   content.append( dsp->makeParameterForWifi( addr[kParamB1_1], static_cast<float>(coeffs[kB1]) ) );
   content.append( dsp->makeParameterForWifi( addr[kParamB0_1], static_cast<float>(coeffs[kB0]) ) );
@@ -907,9 +914,11 @@ void QHighPass::sendDspParameter( void )
   content.append( dsp->makeParameterForWifi( addr[kParamA2_4], static_cast<float>(coeffs[3*5+kA2]) ) );
   content.append( dsp->makeParameterForWifi( addr[kParamA1_4], static_cast<float>(coeffs[3*5+kA1]) ) );
 
+  content.append( dsp->unmuteSequence() );
+
   dsp->sendParameterWifi( content );
 
-
+  enableGui( true );
 }
 
 //==============================================================================

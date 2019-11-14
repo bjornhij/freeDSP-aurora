@@ -1,7 +1,9 @@
-#ifndef SIGMADSP_HPP
-#define SIGMADSP_HPP
+//#ifndef SIGMADSP_HPP
+//#define SIGMADSP_HPP
+#pragma once
 
 #include <cstdint>
+#include <cmath>
 
 #include <QWidget>
 #include <QEventLoop>
@@ -10,7 +12,18 @@
 #include <QProcess>
 #include <QProgressBar>
 
+#include "../../../ESP32/aurora/ak4458.h"
+
 #define NUMPRESETS (4)
+
+// DSP address on I2C bus
+#define DSP_ADDR           (0x70)
+// ADC address on I2C bus
+#define AK5558_I2C_ADDR    (0x22)
+// DAC address on I2C bus
+#define AK4458_I2C_ADDR    (0x20)
+// S/P-DIF-Mux on AddOnB
+#define ADDONB_SPDIFMUX_ADDR (0x82)
 
 class CFreeDspAurora : public QWidget
 {
@@ -66,7 +79,7 @@ public:
   //============================================================================
   /*! Requests the firmware version of the board.
    */
-  bool requestFirmwareVersionWifi( void );
+  bool requestFirmwareVersionWifi( bool showmessage = true );
 
   //============================================================================
   /*! Requests the PID of current installed DSP-Plugin
@@ -79,12 +92,6 @@ public:
    *
    */
   bool requestUserParameterWifi( QByteArray& userparams );
-
-  
-
-
-
-
 
   //============================================================================
   /*!
@@ -185,6 +192,13 @@ public:
   {
     return versionstr;
   }
+
+  uint32_t getFwVersion( void )
+  {
+    return fwVersion;
+  }
+
+  //============================================================================
   /*! Stores the current selected preset as default.
    *
    */
@@ -271,7 +285,180 @@ public:
    * \param presetid New preset id.
    */
   bool selectPresetWifi( int presetid );
-  
+
+  //============================================================================
+  /*! Sets the mute address for the DSP
+   *
+   * \param addr Mute address.
+   */
+  void setMuteAddr( uint16_t addr )
+  {
+    addrMute = addr;
+  }
+
+  //============================================================================
+  /*! Sets the master volume for the DSP in dB.
+   *
+   * \param vol Master volume.
+   */
+  void setMasterVolume( float vol )
+  {
+    masterVolume = vol;
+  }
+
+  //============================================================================
+  /*! Returns the master volume for the DSP in dB.
+   *
+   * \return Master volume.
+   */
+  float getMasterVolume( void )
+  {
+    return masterVolume;
+  }
+
+  //============================================================================
+  /*! Makes the mute sequence
+   */
+  QByteArray muteSequence( void )
+  {
+    QByteArray content;
+    content.append( makeParameterForWifi( addrMute, 0.f ) ); 
+    content.append( makeParameterForWifi( 0x0000, 0 ) );
+    content.append( makeParameterForWifi( 0x0000, 0 ) );
+    content.append( makeParameterForWifi( 0x0000, 0 ) );
+    content.append( makeParameterForWifi( 0x0000, 0 ) );
+
+    return content;
+  }
+
+
+  //============================================================================
+  /*! Makes the unmute sequence
+   */
+  QByteArray unmuteSequence( void )
+  {
+    qDebug()<<"Unmute"<<masterVolume;
+    QByteArray content;
+    content.append( makeParameterForWifi( 0x0000, 0 ) );
+    content.append( makeParameterForWifi( 0x0000, 0 ) );
+    content.append( makeParameterForWifi( 0x0000, 0 ) );
+    content.append( makeParameterForWifi( 0x0000, 0 ) );
+    content.append( makeParameterForWifi( addrMute, static_cast<float>(pow( 10.f, masterVolume/20.f )) ) );
+    return content;
+  }
+
+
+  //============================================================================
+  /*! Mutes the DSP outputs
+   */
+  void mute( void )
+  {
+    QByteArray content;
+    content.append( muteSequence() );
+    sendParameterWifi( content );
+  }
+
+  //============================================================================
+  /*! Unmutes the DSP outputs
+   */
+  void unmute( void )
+  {
+    QByteArray content;
+    content.append( unmuteSequence() );
+    sendParameterWifi( content );
+  }
+
+  //============================================================================
+  /*! Sends a pure i2c message to write to a slave on the i2c bus.
+   *
+   *  \param addr Address of i2c slave.
+   *  \param reg Regsiter of i2c slave.
+   *  \param data Data written to i2c slave.
+   *  \return true if successful, else false.
+   */
+  bool writeI2C( const int8_t addr, const int8_t reg, const int8_t data );
+
+  //============================================================================
+  /*! Reads from a slave on the i2c bus.
+   *
+   *  \param addr Address of i2c slave.
+   *  \param reg Regsiter of i2c slave.
+   *  \param data Data from i2c slave.
+   *  \return true if successful, else false.
+   */
+  bool readI2C( const int8_t addr, const int8_t reg, int8_t& data );
+
+  //============================================================================
+  /*! Sends the addon configuration to DSP.
+   *
+   *  \param str Configuration string.
+   *  \return true if successful, else false.
+   */
+  bool sendAddOnConfig( QString str );
+
+  //============================================================================
+  /*! Requests the addon configuration from DSP.
+   *
+   *  \return true if successful, else false.
+   */
+  bool requestAddOnConfig( void );
+
+  //============================================================================
+  /*! Sets the connection status of DSP
+   *
+   *  \param state Connection status.
+   */
+  void setIsConnected( bool state )
+  {
+    isConnected = state;
+  }
+
+  //============================================================================
+  /*! Returns the connection status of DSP
+   *
+   *  \return Connection status.
+   */
+  bool getIsConnected( void )
+  {
+    return isConnected;
+  }
+
+  //============================================================================
+  /*! Sets the debug mode
+   *
+   *  \param state Debug mode.
+   */
+  void setDebugMode( bool state )
+  {
+    debugMode = state;
+  }
+
+  //============================================================================
+  /*! Returns the addon configuration
+   *
+   *  \return Addon Configuration.
+   */
+  QString getAddOnConfig( void )
+  {
+    return configAddOn;
+  }
+
+  //============================================================================
+  /*! Mutes the DAC outputs
+   */
+  bool muteDAC( void )
+  {
+    return writeI2C( AK4458_I2C_ADDR, AK4458_CONTROL2, 0b00100011 );
+  }
+
+  //============================================================================
+  /*! Unmutes the DAC outputs
+   */
+  bool unmuteDAC( void )
+  {
+    return writeI2C( AK4458_I2C_ADDR, AK4458_CONTROL2, 0b00100010 );
+  }
+
 private:
   //============================================================================
   /*!
@@ -316,8 +503,13 @@ private:
   QString ssidWifi;
   bool isConnected = false;
   QString versionstr = "0.0.0";
+  uint32_t fwVersion = 0;
   quint32 addon;
+  uint16_t addrMute;
+  float masterVolume;
+  bool debugMode = false;
+  QString configAddOn;
 
 };
 
-#endif // SIGMADSP_HPP
+//#endif // SIGMADSP_HPP
