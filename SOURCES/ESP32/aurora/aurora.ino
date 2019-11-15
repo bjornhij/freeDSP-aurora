@@ -2221,6 +2221,15 @@ void loop()
 
   handleHttpRequest();
 
+  if (Serial.available() > 0) {
+    // read the incoming byte:
+    int incomingByte = Serial.read();
+
+    // say what you got:
+    Serial.print("I received: ");
+    Serial.println(incomingByte, DEC);
+  }
+
   //delay( 50 );
 
   webota.handle();
