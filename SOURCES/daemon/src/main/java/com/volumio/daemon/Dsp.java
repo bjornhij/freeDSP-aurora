@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+
 @Component
-public class Dsp {
+public class Dsp extends AbstractSpringSerialPortConnector {
 
     Logger logger = LoggerFactory.getLogger(Dsp.class);
 
@@ -21,11 +23,13 @@ public class Dsp {
     private String input;
 
     int getVolume() {
-
+        logger.info("Volume = " + volume);
         return volume;
     }
 
     void setVolume(int volume) {
+
+        logger.info("Set volume to " + volume);
 
         // http://www.playdotsound.com/portfolio-item/decibel-db-to-float-value-calculator-making-sense-of-linear-values-in-audio-tools/
         // linear-to-db(x) = log(x) * 20
@@ -39,6 +43,15 @@ public class Dsp {
         dsp_volume = Math.pow(10.0, dsp_volume/20.0);
 
         String data = this.makeParameter(20396, dsp_volume);
+
+        try {
+            this.sendMessage(data);
+            this.sendMessage("\r");
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     String getInput() {
@@ -83,5 +96,10 @@ public class Dsp {
                 + ((short)(fractpart * 16777216.f) & 0x00ffffff);
 
         return ret;
+    }
+
+    @Override
+    public void processData(String line) {
+        logger.info(line);
     }
 }

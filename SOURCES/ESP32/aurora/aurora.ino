@@ -747,7 +747,13 @@ void setup( void )
   WiFi.mode( WIFI_AP_STA );
   WiFi.setHostname( "freeDSP-aurora" );
   // Start access point
-  WiFi.softAP( "AP-freeDSP-aurora" );
+
+  randomSeed(analogRead(0));
+
+  long longPass = random(1000,9999);
+  String strPass = String(longPass);
+  
+  WiFi.softAP( "AP-freeDSP-aurora", strPass.c_str() );
   delay(100);
   //wait for SYSTEM_EVENT_AP_START
   if( !WiFi.softAPConfig( IPAddress(192, 168, 5, 1), IPAddress(192, 168, 5, 1), IPAddress(255, 255, 255, 0) ) )
@@ -772,6 +778,8 @@ void setup( void )
   // print the ESP32 IP-Address
   Serial.print( "Soft AP IP:" );
   Serial.println( WiFi.softAPIP() );
+  Serial.print( "Soft AP password:" );
+  Serial.println( strPass );
   Serial.print( "Local IP:" );
   Serial.println( WiFi.localIP() );
   Serial.println( WiFi.getHostname() );
@@ -1988,16 +1996,47 @@ void handleHttpRequest()
  */
 void loop()
 {
+  static String currentSerialLine = "";
 
   handleHttpRequest();
 
   if (Serial.available() > 0) {
-    // read the incoming byte:
-    int incomingByte = Serial.read();
 
-    // say what you got:
-    Serial.print("I received: ");
-    Serial.println(incomingByte, DEC);
+    char input = Serial.read();
+
+    if(input != '\r')
+    {
+      currentSerialLine += input;
+    }
+    else
+    {
+      Serial.print("Sending to DSP: ");
+      Serial.println(currentSerialLine);
+
+      int sentBytes = 0;
+      while( sentBytes + 12 <= currentSerialLine.length() )
+      {
+        String strReg = currentSerialLine.substring( sentBytes + 0, sentBytes + 4 );
+        String strData = currentSerialLine.substring( sentBytes + 4, sentBytes + 12 );
+        Serial.println( strReg );
+        Serial.println( strData );
+        uint16_t reg = (uint16_t)strtoul( strReg.c_str(), NULL, 16 );
+        uint32_t data = (uint32_t)strtoul( strData.c_str(), NULL, 16 );
+      
+        byte val[4];
+        val[0] = (data >> 24 ) & 0xFF;
+        val[1] = (data >> 16 ) & 0xFF;
+        val[2] = (data >> 8 ) & 0xFF;
+        val[3] = data & 0xFF;
+        ADAU1452_WRITE_BLOCK( reg, val, 4 );         
+      
+        sentBytes += 12;
+      } 
+
+      Serial.println("Sent");
+
+      currentSerialLine = "";
+    }
   }
 
   //delay( 50 );
