@@ -42,11 +42,16 @@ public class Dsp extends AbstractSpringSerialPortConnector {
 
         dsp_volume = Math.pow(10.0, dsp_volume/20.0);
 
+        logger.info("Setting to " + dsp_volume + "??");
+
+
         String data = this.makeParameter(20396, dsp_volume);
+
+        logger.info("Calculated: " + data);
 
         try {
             this.sendMessage(data);
-            this.sendMessage("\r");
+            this.sendMessage("\n");
         }
         catch (IOException e)
         {
@@ -71,12 +76,12 @@ public class Dsp extends AbstractSpringSerialPortConnector {
 
         long val_824 = this.convertTo824(val);
 
+        logger.info(String.format("%32s", Long.toBinaryString(val_824)).replace(' ', '0'));
+
         data = data + String.format("%02X", (byte)((val_824 >> 24) & 0x000000FF));
         data = data + String.format("%02X", (byte)((val_824 >> 16) & 0x000000FF));
         data = data + String.format("%02X", (byte)((val_824 >> 8) & 0x000000FF));
         data = data + String.format("%02X", (byte)(val_824 & 0x000000FF));
-
-        logger.info(data);
 
         return data;
     }
@@ -92,8 +97,12 @@ public class Dsp extends AbstractSpringSerialPortConnector {
         intpart = (short) Math.floor( val );
         fractpart = val - intpart;
 
+        logger.info("intpart=" + intpart);
+        logger.info("fractpart=" + fractpart);
+
+
         ret = ((intpart << 24) & 0xff000000)
-                + ((short)(fractpart * 16777216.f) & 0x00ffffff);
+                + ((long)(fractpart * 16777216.f) & 0x00ffffff);
 
         return ret;
     }
