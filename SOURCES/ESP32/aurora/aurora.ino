@@ -744,20 +744,8 @@ void setup( void )
   //  Serial.println( "[ERROR] Could not set up mDNS responder!" );   
 
   WiFi.disconnect();
-  WiFi.mode( WIFI_AP_STA );
+  WiFi.mode( WIFI_STA );
   WiFi.setHostname( "freeDSP-aurora" );
-  // Start access point
-
-  randomSeed(analogRead(0));
-
-  long longPass = random(1000,9999);
-  String strPass = String(longPass);
-  
-  WiFi.softAP( "AP-freeDSP-aurora", strPass.c_str() );
-  delay(100);
-  //wait for SYSTEM_EVENT_AP_START
-  if( !WiFi.softAPConfig( IPAddress(192, 168, 5, 1), IPAddress(192, 168, 5, 1), IPAddress(255, 255, 255, 0) ) )
-      Serial.println("AP Config Failed");
 
   Serial.print( "Connecting to \"" );
   Serial.print( Settings.ssid.c_str() );
@@ -767,23 +755,38 @@ void setup( void )
   int cntrConnect = 0;
   if( Settings.ssid.length() > 0 )
   {
-    while( (WiFi.waitForConnectResult() != WL_CONNECTED) && (cntrConnect < 3) )
+    while( (WiFi.waitForConnectResult() != WL_CONNECTED) && (cntrConnect < 20) )
     {
       Serial.println("WiFi Connection Failed! Trying again..");
-      delay(100);
+      delay(250);
+
+      WiFi.begin( Settings.ssid.c_str(), Settings.password.c_str() );
+
       cntrConnect++;
     }
   }
-  
-  // print the ESP32 IP-Address
-  Serial.print( "Soft AP IP:" );
-  Serial.println( WiFi.softAPIP() );
-  Serial.print( "Soft AP password:" );
-  Serial.println( strPass );
-  Serial.print( "Local IP:" );
-  Serial.println( WiFi.localIP() );
-  Serial.println( WiFi.getHostname() );
 
+  if (WiFi.waitForConnectResult() == WL_CONNECTED)
+  {
+    Serial.println("Connected succesfully");
+    Serial.print( "Local IP:" );
+    Serial.println( WiFi.localIP() );
+    Serial.println( WiFi.getHostname() );
+  }
+  else
+  {
+    WiFi.mode( WIFI_AP );
+
+    WiFi.softAP( "AP-freeDSP-aurora");
+    delay(100);
+    //wait for SYSTEM_EVENT_AP_START
+    if( !WiFi.softAPConfig( IPAddress(192, 168, 5, 1), IPAddress(192, 168, 5, 1), IPAddress(255, 255, 255, 0) ) )
+        Serial.println("AP Config Failed");
+
+    Serial.print( "Soft AP IP:" );
+    Serial.println( WiFi.softAPIP() );
+  }
+  
   server.begin();  
 
   Wire.begin( I2C_SDA_PIN, I2C_SCL_PIN );
@@ -2008,13 +2011,14 @@ void loop()
     {
       currentSerialLine += input;
     }
-    else
+    if(input == '\n')
     {
       Serial.print("Sending to DSP: ");
       Serial.println(currentSerialLine);
+      Serial.println(currentSerialLine.length());
 
       int sentBytes = 0;
-      while( sentBytes + 12 <= currentSerialLine.length() )
+      while( sentBytes + 12 < currentSerialLine.length() )
       {
         String strReg = currentSerialLine.substring( sentBytes + 0, sentBytes + 4 );
         String strData = currentSerialLine.substring( sentBytes + 4, sentBytes + 12 );
@@ -2034,6 +2038,13 @@ void loop()
       } 
 
       Serial.println("Sent");
+      Serial.println("");
+      Serial.println("");
+      Serial.println("");
+      Serial.println("");
+      Serial.println("");
+      Serial.println("");
+      Serial.println("");
 
       currentSerialLine = "";
     }

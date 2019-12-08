@@ -45,7 +45,7 @@ public class Dsp extends AbstractSpringSerialPortConnector {
         logger.info("Setting to " + dsp_volume + "??");
 
 
-        String data = this.makeParameter(20396, dsp_volume);
+        String data = this.makeParameter(0x4fb8, dsp_volume);
 
         logger.info("Calculated: " + data);
 
