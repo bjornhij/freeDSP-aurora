@@ -2013,40 +2013,52 @@ void loop()
     }
     if(input == '\n')
     {
-      Serial.print("Sending to DSP: ");
+      if(currentSerialLine[0] == 'D')
+      {
+        currentSerialLine.remove(0, 1);
+        Serial.print("Sending to DSP: ");
+        Serial.println(currentSerialLine);
+        Serial.println(currentSerialLine.length());
+  
+        int sentBytes = 0;
+        while( sentBytes + 12 < currentSerialLine.length() )
+        {
+          String strReg = currentSerialLine.substring( sentBytes + 0, sentBytes + 4 );
+          String strData = currentSerialLine.substring( sentBytes + 4, sentBytes + 12 );
+          Serial.println( strReg );
+          Serial.println( strData );
+          uint16_t reg = (uint16_t)strtoul( strReg.c_str(), NULL, 16 );
+          uint32_t data = (uint32_t)strtoul( strData.c_str(), NULL, 16 );
+        
+          byte val[4];
+          val[0] = (data >> 24 ) & 0xFF;
+          val[1] = (data >> 16 ) & 0xFF;
+          val[2] = (data >> 8 ) & 0xFF;
+          val[3] = data & 0xFF;
+          ADAU1452_WRITE_BLOCK( reg, val, 4 );         
+        
+          sentBytes += 12;
+        } 
+  
+        Serial.println("Sent");
+        Serial.println("");
+        Serial.println("");
+        Serial.println("");
+        Serial.println("");
+        Serial.println("");
+        Serial.println("");
+        Serial.println("");
+  
+        currentSerialLine = "";
+      }
+    }
+    if(currentSerialLine[0] == 'I')
+    {
+      currentSerialLine.remove(0, 1);
+      Serial.print("Sending to I2C: ");
       Serial.println(currentSerialLine);
       Serial.println(currentSerialLine.length());
-
-      int sentBytes = 0;
-      while( sentBytes + 12 < currentSerialLine.length() )
-      {
-        String strReg = currentSerialLine.substring( sentBytes + 0, sentBytes + 4 );
-        String strData = currentSerialLine.substring( sentBytes + 4, sentBytes + 12 );
-        Serial.println( strReg );
-        Serial.println( strData );
-        uint16_t reg = (uint16_t)strtoul( strReg.c_str(), NULL, 16 );
-        uint32_t data = (uint32_t)strtoul( strData.c_str(), NULL, 16 );
       
-        byte val[4];
-        val[0] = (data >> 24 ) & 0xFF;
-        val[1] = (data >> 16 ) & 0xFF;
-        val[2] = (data >> 8 ) & 0xFF;
-        val[3] = data & 0xFF;
-        ADAU1452_WRITE_BLOCK( reg, val, 4 );         
-      
-        sentBytes += 12;
-      } 
-
-      Serial.println("Sent");
-      Serial.println("");
-      Serial.println("");
-      Serial.println("");
-      Serial.println("");
-      Serial.println("");
-      Serial.println("");
-      Serial.println("");
-
-      currentSerialLine = "";
     }
   }
 
