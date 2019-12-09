@@ -30,6 +30,15 @@ public class ControlController {
                 "<br/><br/>" +
                 "<a href=\"#\" class=\"volume\" data-id=\"down\">voldown</a> /\n" +
                 "<a href=\"#\" class=\"volume\" data-id=\"up\">volup</a> <br/><br>" +
+                "<a href=\"#\" class=\"input\" data-id=\"usb\">usb</a><br/>\n" +
+                "<a href=\"#\" class=\"input\" data-id=\"optical_1\">optical_1</a><br/>\n" +
+                "<a href=\"#\" class=\"input\" data-id=\"optical_2\">optical_2</a><br/>\n" +
+                "<a href=\"#\" class=\"input\" data-id=\"optical_3\">optical_3</a><br/>\n" +
+                "<a href=\"#\" class=\"input\" data-id=\"optical_4\">optical_4</a><br/>\n" +
+                "<a href=\"#\" class=\"input\" data-id=\"analog_1\">analog_1</a><br/>\n" +
+                "<a href=\"#\" class=\"input\" data-id=\"analog_2\">analog_2</a><br/>\n" +
+                "<a href=\"#\" class=\"input\" data-id=\"analog_3\">analog_3</a><br/>\n" +
+                "<a href=\"#\" class=\"input\" data-id=\"analog_4\">analog_4</a><br/>" +
                 "<body>" +
                 "<script>\n" +
                 "\n" +
@@ -57,6 +66,18 @@ public class ControlController {
                 "\t});\n" +
                 "\n" +
                 "});" +
+                "$(\".input\").on(\"click\", function() {\n" +
+                "\n" +
+                "\tstate = $(this).data(\"id\");\n" +
+                "\t$.ajax({\n" +
+                "\t    url: '/input/' + state,\n" +
+                "\t    type: 'PUT',\n" +
+                "\t    success: function(result) {\n" +
+                "\t        alert(\"INPUT CHANGE\");\n" +
+                "\t    }\n" +
+                "\t});\n" +
+                "\n" +
+                "});" +
                 "</script>" +
                 "</html>";
 
@@ -66,16 +87,26 @@ public class ControlController {
 
 /*
 
-<a href="#" id="state" data-id="on">on</a> /
-<a href="#" id="state" data-id="off">off</a> <br/><br>
-<a href="#" id="volume" data-id="up">volup</a> /
-<a href="#" id="volume" data-id="down">voldown</a> <br/><br>
+<a href="#" class="state" data-id="on">on</a> /
+<a href="#" class="state" data-id="off">off</a>
+<br/><br>
+<a href="#" class="volume" data-id="up">volup</a> /
+<a href="#" class="volume" data-id="down">voldown</a>
+<br/><br>
+<a href="#" class="input" data-id="optical_1">optical_1</a><br/>
+<a href="#" class="input" data-id="optical_2">optical_2</a><br/>
+<a href="#" class="input" data-id="optical_3">optical_3</a><br/>
+<a href="#" class="input" data-id="optical_4">optical_4</a><br/>
+<a href="#" class="input" data-id="analog_1">analog_1</a><br/>
+<a href="#" class="input" data-id="analog_2">analog_2</a><br/>
+<a href="#" class="input" data-id="analog_3">analog_3</a><br/>
+<a href="#" class="input" data-id="analog_4">analog_4</a><br/>
 
 
 
 <script>
 
-$("#state").on("click", function() {
+$(".state").on("click", function() {
 
 	state = $(this).data("id");
 	$.ajax({
@@ -88,7 +119,7 @@ $("#state").on("click", function() {
 
 });
 
-$("#volume").on("click", function() {
+$(".volume").on("click", function() {
 
 	state = $(this).data("id");
 	$.ajax({
@@ -96,6 +127,19 @@ $("#volume").on("click", function() {
 	    type: 'PUT',
 	    success: function(result) {
 	        alert("VOL CHANGE");
+	    }
+	});
+
+});
+
+$(".input").on("click", function() {
+
+	state = $(this).data("id");
+	$.ajax({
+	    url: '/input/' + state,
+	    type: 'PUT',
+	    success: function(result) {
+	        alert("INPUT CHANGE");
 	    }
 	});
 

@@ -14,11 +14,21 @@ public class Volumio {
     @Value("${volumiodaemon.volumio_url}")
     private String volumio_url;
 
+    public void setInput(String input)
+    {
+        String call = volumio_url + "browse?url=freedsp_aurora_control/" + input;
+        logger.info("Setting volume in Volumio");
+        logger.info(call);
+        RestTemplate rest = new RestTemplate();
+        String result = rest.getForObject(call, String.class);
+        logger.info("Result=" + result);
+    }
+
     public void setVolume(int volume)
     {
-        logger.info(volumio_url);
-        String call = volumio_url + "cmd=volume&volume=" + volume;
-        logger.info("Setting volume in Volumio");
+        String call = volumio_url + "commands/?cmd=volume&volume=" + volume;
+        logger.info("Setting input in Volumio");
+        logger.info(call);
         RestTemplate rest = new RestTemplate();
         String result = rest.getForObject(call, String.class);
         logger.info("Result=" + result);
