@@ -22,6 +22,8 @@ public class Hypex {
     @Value("off")
     private String state;
 
+    GpioPinDigitalOutput gpiopin;
+
     String getState() {
         logger.info("State = " + state);
         return state;
@@ -35,17 +37,21 @@ public class Hypex {
 
         final GpioController gpio = GpioFactory.getInstance();
 
+        if(this.gpiopin == null)
+            this.gpiopin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_03, "AMPON", PinState.HIGH);
+
+
         switch(state)
         {
             case "on":
 
-                final GpioPinDigitalOutput pin1 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_03, "AMPON", PinState.LOW);
+                this.gpiopin.low();
 
                 break;
 
             case "off":
 
-                final GpioPinDigitalInput pin2 = gpio.provisionDigitalInputPin(RaspiPin.GPIO_03);
+                this.gpiopin.high();
 
                 break;
         }
