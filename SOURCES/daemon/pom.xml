@@ -12,7 +12,7 @@
     <artifactId>daemon</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>daemon</name>
-    <description>Bridge between volumio and freeDSP aurora</description>
+    <description>Bridge between volumio, freeDSP aurora and Hypex Ncore</description>
 
     <properties>
         <java.version>1.8</java.version>
@@ -33,13 +33,16 @@
             <artifactId>nrjavaserial</artifactId>
             <version>RELEASE</version>
         </dependency>
-
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.pi4j</groupId>
+            <artifactId>pi4j-core</artifactId>
+            <version>1.2</version>
+        </dependency>
     </dependencies>
 
     <build>

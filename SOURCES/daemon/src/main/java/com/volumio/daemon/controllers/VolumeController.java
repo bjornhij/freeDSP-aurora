@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Pattern;
 
 @Controller
 @Validated
@@ -26,7 +27,31 @@ public class VolumeController {
 
     @PutMapping("/volume/{vol}")
     @ResponseBody
-    void putVolume(@PathVariable(value="vol") @Min(0) @Max(100) Integer volume) {
-        this.volume.setVolume(volume);
+    void putVolume(@PathVariable(value="vol") @Pattern(regexp="up|down|\\d{1,2}") String volume)
+    {
+        int curvol = this.volume.getVolume();
+
+        switch(volume)
+        {
+            case "up":
+
+                if(curvol < 80)
+                    this.volume.setVolume(curvol + 1);
+
+                break;
+
+            case "down":
+
+                if(curvol > 0)
+                    this.volume.setVolume(curvol - 1);
+
+                break;
+
+            default:
+
+                this.volume.setVolume(Integer.parseInt(volume));
+
+                break;
+        }
     }
 }
