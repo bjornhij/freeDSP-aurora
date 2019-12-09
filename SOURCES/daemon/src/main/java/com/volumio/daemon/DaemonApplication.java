@@ -15,6 +15,9 @@ public class DaemonApplication {
     @Autowired
     Volume volume;
 
+    @Autowired
+    Input input;
+
     public static void main(String[] args) {
 
         SpringApplication.run(DaemonApplication.class, args);
@@ -27,6 +30,7 @@ public class DaemonApplication {
     public void onApplicationEvent(ContextRefreshedEvent event) {
         logger.info("Initialized");
         volume.setVolume(10);
+        input.setInput("usb");
     }
 
 }
