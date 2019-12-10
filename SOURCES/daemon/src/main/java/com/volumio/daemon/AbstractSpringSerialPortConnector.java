@@ -77,7 +77,7 @@ public abstract class AbstractSpringSerialPortConnector implements SpringSerialP
     public synchronized void serialEvent(SerialPortEvent serialPortEvent) {
         if (serialPortEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
             try {
-                if (input.ready()) {
+                while (input.ready()) {
                     processData(input.readLine());
                 }
 

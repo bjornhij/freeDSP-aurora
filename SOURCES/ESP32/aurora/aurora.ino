@@ -2013,7 +2013,7 @@ void loop()
     }
     if(input == '\n')
     {
-      if(currentSerialLine[0] == 'D')
+      if(currentSerialLine.charAt(0) == 'D')
       {
         currentSerialLine.remove(0, 1);
         Serial.print("Sending to DSP: ");
@@ -2041,24 +2041,24 @@ void loop()
         } 
   
         Serial.println("Sent");
-        Serial.println("");
-        Serial.println("");
-        Serial.println("");
-        Serial.println("");
-        Serial.println("");
-        Serial.println("");
-        Serial.println("");
   
         currentSerialLine = "";
       }
-    }
-    if(currentSerialLine[0] == 'I')
-    {
-      currentSerialLine.remove(0, 1);
-      Serial.print("Sending to I2C: ");
-      Serial.println(currentSerialLine);
-      Serial.println(currentSerialLine.length());
-      
+      else if(currentSerialLine[0] == 'I')
+      {
+        currentSerialLine.remove(0, 1);
+        Serial.print("Sending to I2C: ");
+        Serial.println(currentSerialLine);
+        Serial.println(currentSerialLine.length());
+        
+      }
+      else
+      {
+        Serial.print("Invalid command: ");
+        Serial.print(currentSerialLine.charAt(0));
+        Serial.print(" : ");
+        Serial.println(currentSerialLine);
+      }
     }
   }
 
