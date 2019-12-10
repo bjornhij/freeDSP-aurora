@@ -54,8 +54,11 @@ public class Dsp extends AbstractSpringSerialPortConnector {
 
     void sendData(String data)
     {
+        logger.info("Sending: " + data);
+
+
         try {
-            this.sendMessage("D" + data);
+            this.sendMessage(data);
             this.sendMessage("\n");
         }
         catch (IOException e)
