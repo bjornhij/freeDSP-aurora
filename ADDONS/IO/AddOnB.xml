@@ -1,0 +1,1526 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<export version="D">
+  <design>
+    <source>/Users/bjornhijmans/Documents/Privé/electronica/dsp_rpi_ncore_amp/IO/AddOnB.sch</source>
+    <date>2019 November 20, Wednesday 17:53:39</date>
+    <tool>Eeschema (5.1.2-1)-1</tool>
+    <sheet number="1" name="/" tstamps="/">
+      <title_block>
+        <title/>
+        <company/>
+        <rev/>
+        <date/>
+        <source>AddOnB.sch</source>
+        <comment number="1" value=""/>
+        <comment number="2" value=""/>
+        <comment number="3" value=""/>
+        <comment number="4" value=""/>
+      </title_block>
+    </sheet>
+  </design>
+  <components>
+    <comp ref="X109">
+      <value>CONN_RCA_02x04</value>
+      <footprint>rklib:PJRAS4X2U01</footprint>
+      <fields>
+        <field name="Manufacturer">Switchcraft Inc.</field>
+        <field name="pn">PJRAS4X2U01AUX</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="CONN_RCA_02x04-rkdev" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5C8D8FDA</tstamp>
+    </comp>
+    <comp ref="R117">
+      <value>RES_100R_1%_0.25W_Thin_0805</value>
+      <footprint>rklib:C0805-RES</footprint>
+      <fields>
+        <field name="Manufacturer">Stackpole Electronics Inc</field>
+        <field name="Value1">100R</field>
+        <field name="Value2">1% 0.25W Thin</field>
+        <field name="digikey">RNCP0805FTD100RCT-ND</field>
+        <field name="pn">RNCP0805FTD100R</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="RES_100R_1%_0.25W_Thin_0805-rk" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5C8DE128</tstamp>
+    </comp>
+    <comp ref="C101">
+      <value>CAP_100p_50V_C0G_NP0_0805</value>
+      <footprint>rklib:C0805-X7R</footprint>
+      <fields>
+        <field name="Manufacturer">KEMET</field>
+        <field name="Value1">100p</field>
+        <field name="Value2">5% 50V C0G/NP0</field>
+        <field name="digikey">399-1122-1-ND</field>
+        <field name="pn">C0805C101J5GACTU</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="CAP_100p_50V_C0G_NP0_0805-rk" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5C8DF04D</tstamp>
+    </comp>
+    <comp ref="R119">
+      <value>RES_100R_1%_0.25W_Thin_0805</value>
+      <footprint>rklib:C0805-RES</footprint>
+      <fields>
+        <field name="Manufacturer">Stackpole Electronics Inc</field>
+        <field name="Value1">100R</field>
+        <field name="Value2">1% 0.25W Thin</field>
+        <field name="digikey">RNCP0805FTD100RCT-ND</field>
+        <field name="pn">RNCP0805FTD100R</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="RES_100R_1%_0.25W_Thin_0805-rk" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5C8DF1B4</tstamp>
+    </comp>
+    <comp ref="C102">
+      <value>CAP_100p_50V_C0G_NP0_0805</value>
+      <footprint>rklib:C0805-X7R</footprint>
+      <fields>
+        <field name="Manufacturer">KEMET</field>
+        <field name="Value1">100p</field>
+        <field name="Value2">5% 50V C0G/NP0</field>
+        <field name="digikey">399-1122-1-ND</field>
+        <field name="pn">C0805C101J5GACTU</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="CAP_100p_50V_C0G_NP0_0805-rk" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5C8DF1BE</tstamp>
+    </comp>
+    <comp ref="R118">
+      <value>RES_220K_1%_0.125W_Thick_0805</value>
+      <footprint>rklib:C0805-RES</footprint>
+      <fields>
+        <field name="Manufacturer">Yageo</field>
+        <field name="Value1">220K</field>
+        <field name="Value2">1% 0.125W Thick</field>
+        <field name="pn">RC0805FR-07220KL</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="RES_100K_1%_0.125W_Thick_0805-rk" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5C8E3F61</tstamp>
+    </comp>
+    <comp ref="R120">
+      <value>RES_220K_1%_0.125W_Thick_0805</value>
+      <footprint>rklib:C0805-RES</footprint>
+      <fields>
+        <field name="Manufacturer">Yageo</field>
+        <field name="Value1">220K</field>
+        <field name="Value2">1% 0.125W Thick</field>
+        <field name="pn">RC0805FR-07220KL</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="RES_100K_1%_0.125W_Thick_0805-rk" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5C8E43D9</tstamp>
+    </comp>
+    <comp ref="R121">
+      <value>RES_100R_1%_0.25W_Thin_0805</value>
+      <footprint>rklib:C0805-RES</footprint>
+      <fields>
+        <field name="Manufacturer">Stackpole Electronics Inc</field>
+        <field name="Value1">100R</field>
+        <field name="Value2">1% 0.25W Thin</field>
+        <field name="digikey">RNCP0805FTD100RCT-ND</field>
+        <field name="pn">RNCP0805FTD100R</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="RES_100R_1%_0.25W_Thin_0805-rk" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5C8F6D42</tstamp>
+    </comp>
+    <comp ref="C103">
+      <value>CAP_100p_50V_C0G_NP0_0805</value>
+      <footprint>rklib:C0805-X7R</footprint>
+      <fields>
+        <field name="Manufacturer">KEMET</field>
+        <field name="Value1">100p</field>
+        <field name="Value2">5% 50V C0G/NP0</field>
+        <field name="digikey">399-1122-1-ND</field>
+        <field name="pn">C0805C101J5GACTU</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="CAP_100p_50V_C0G_NP0_0805-rk" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5C8F6D4C</tstamp>
+    </comp>
+    <comp ref="R123">
+      <value>RES_100R_1%_0.25W_Thin_0805</value>
+      <footprint>rklib:C0805-RES</footprint>
+      <fields>
+        <field name="Manufacturer">Stackpole Electronics Inc</field>
+        <field name="Value1">100R</field>
+        <field name="Value2">1% 0.25W Thin</field>
+        <field name="digikey">RNCP0805FTD100RCT-ND</field>
+        <field name="pn">RNCP0805FTD100R</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="RES_100R_1%_0.25W_Thin_0805-rk" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5C8F6D56</tstamp>
+    </comp>
+    <comp ref="C104">
+      <value>CAP_100p_50V_C0G_NP0_0805</value>
+      <footprint>rklib:C0805-X7R</footprint>
+      <fields>
+        <field name="Manufacturer">KEMET</field>
+        <field name="Value1">100p</field>
+        <field name="Value2">5% 50V C0G/NP0</field>
+        <field name="digikey">399-1122-1-ND</field>
+        <field name="pn">C0805C101J5GACTU</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="CAP_100p_50V_C0G_NP0_0805-rk" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5C8F6D60</tstamp>
+    </comp>
+    <comp ref="R122">
+      <value>RES_220K_1%_0.125W_Thick_0805</value>
+      <footprint>rklib:C0805-RES</footprint>
+      <fields>
+        <field name="Manufacturer">Yageo</field>
+        <field name="Value1">220K</field>
+        <field name="Value2">1% 0.125W Thick</field>
+        <field name="pn">RC0805FR-07220KL</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="RES_100K_1%_0.125W_Thick_0805-rk" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5C8F6D71</tstamp>
+    </comp>
+    <comp ref="R124">
+      <value>RES_220K_1%_0.125W_Thick_0805</value>
+      <footprint>rklib:C0805-RES</footprint>
+      <fields>
+        <field name="Manufacturer">Yageo</field>
+        <field name="Value1">220K</field>
+        <field name="Value2">1% 0.125W Thick</field>
+        <field name="pn">RC0805FR-07220KL</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="RES_100K_1%_0.125W_Thick_0805-rk" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5C8F6D7A</tstamp>
+    </comp>
+    <comp ref="R125">
+      <value>RES_100R_1%_0.25W_Thin_0805</value>
+      <footprint>rklib:C0805-RES</footprint>
+      <fields>
+        <field name="Manufacturer">Stackpole Electronics Inc</field>
+        <field name="Value1">100R</field>
+        <field name="Value2">1% 0.25W Thin</field>
+        <field name="digikey">RNCP0805FTD100RCT-ND</field>
+        <field name="pn">RNCP0805FTD100R</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="RES_100R_1%_0.25W_Thin_0805-rk" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5C8F9A72</tstamp>
+    </comp>
+    <comp ref="C105">
+      <value>CAP_100p_50V_C0G_NP0_0805</value>
+      <footprint>rklib:C0805-X7R</footprint>
+      <fields>
+        <field name="Manufacturer">KEMET</field>
+        <field name="Value1">100p</field>
+        <field name="Value2">5% 50V C0G/NP0</field>
+        <field name="digikey">399-1122-1-ND</field>
+        <field name="pn">C0805C101J5GACTU</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="CAP_100p_50V_C0G_NP0_0805-rk" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5C8F9A7C</tstamp>
+    </comp>
+    <comp ref="R127">
+      <value>RES_100R_1%_0.25W_Thin_0805</value>
+      <footprint>rklib:C0805-RES</footprint>
+      <fields>
+        <field name="Manufacturer">Stackpole Electronics Inc</field>
+        <field name="Value1">100R</field>
+        <field name="Value2">1% 0.25W Thin</field>
+        <field name="digikey">RNCP0805FTD100RCT-ND</field>
+        <field name="pn">RNCP0805FTD100R</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="RES_100R_1%_0.25W_Thin_0805-rk" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5C8F9A86</tstamp>
+    </comp>
+    <comp ref="C106">
+      <value>CAP_100p_50V_C0G_NP0_0805</value>
+      <footprint>rklib:C0805-X7R</footprint>
+      <fields>
+        <field name="Manufacturer">KEMET</field>
+        <field name="Value1">100p</field>
+        <field name="Value2">5% 50V C0G/NP0</field>
+        <field name="digikey">399-1122-1-ND</field>
+        <field name="pn">C0805C101J5GACTU</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="CAP_100p_50V_C0G_NP0_0805-rk" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5C8F9A90</tstamp>
+    </comp>
+    <comp ref="R126">
+      <value>RES_220K_1%_0.125W_Thick_0805</value>
+      <footprint>rklib:C0805-RES</footprint>
+      <fields>
+        <field name="Manufacturer">Yageo</field>
+        <field name="Value1">220K</field>
+        <field name="Value2">1% 0.125W Thick</field>
+        <field name="pn">RC0805FR-07220KL</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="RES_100K_1%_0.125W_Thick_0805-rk" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5C8F9AA1</tstamp>
+    </comp>
+    <comp ref="R128">
+      <value>RES_220K_1%_0.125W_Thick_0805</value>
+      <footprint>rklib:C0805-RES</footprint>
+      <fields>
+        <field name="Manufacturer">Yageo</field>
+        <field name="Value1">220K</field>
+        <field name="Value2">1% 0.125W Thick</field>
+        <field name="pn">RC0805FR-07220KL</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="RES_100K_1%_0.125W_Thick_0805-rk" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5C8F9AAA</tstamp>
+    </comp>
+    <comp ref="R129">
+      <value>RES_100R_1%_0.25W_Thin_0805</value>
+      <footprint>rklib:C0805-RES</footprint>
+      <fields>
+        <field name="Manufacturer">Stackpole Electronics Inc</field>
+        <field name="Value1">100R</field>
+        <field name="Value2">1% 0.25W Thin</field>
+        <field name="digikey">RNCP0805FTD100RCT-ND</field>
+        <field name="pn">RNCP0805FTD100R</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="RES_100R_1%_0.25W_Thin_0805-rk" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5C8FDC48</tstamp>
+    </comp>
+    <comp ref="C107">
+      <value>CAP_100p_50V_C0G_NP0_0805</value>
+      <footprint>rklib:C0805-X7R</footprint>
+      <fields>
+        <field name="Manufacturer">KEMET</field>
+        <field name="Value1">100p</field>
+        <field name="Value2">5% 50V C0G/NP0</field>
+        <field name="digikey">399-1122-1-ND</field>
+        <field name="pn">C0805C101J5GACTU</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="CAP_100p_50V_C0G_NP0_0805-rk" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5C8FDC52</tstamp>
+    </comp>
+    <comp ref="R131">
+      <value>RES_100R_1%_0.25W_Thin_0805</value>
+      <footprint>rklib:C0805-RES</footprint>
+      <fields>
+        <field name="Manufacturer">Stackpole Electronics Inc</field>
+        <field name="Value1">100R</field>
+        <field name="Value2">1% 0.25W Thin</field>
+        <field name="digikey">RNCP0805FTD100RCT-ND</field>
+        <field name="pn">RNCP0805FTD100R</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="RES_100R_1%_0.25W_Thin_0805-rk" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5C8FDC5C</tstamp>
+    </comp>
+    <comp ref="C108">
+      <value>CAP_100p_50V_C0G_NP0_0805</value>
+      <footprint>rklib:C0805-X7R</footprint>
+      <fields>
+        <field name="Manufacturer">KEMET</field>
+        <field name="Value1">100p</field>
+        <field name="Value2">5% 50V C0G/NP0</field>
+        <field name="digikey">399-1122-1-ND</field>
+        <field name="pn">C0805C101J5GACTU</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="CAP_100p_50V_C0G_NP0_0805-rk" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5C8FDC66</tstamp>
+    </comp>
+    <comp ref="R130">
+      <value>RES_220K_1%_0.125W_Thick_0805</value>
+      <footprint>rklib:C0805-RES</footprint>
+      <fields>
+        <field name="Manufacturer">Yageo</field>
+        <field name="Value1">220K</field>
+        <field name="Value2">1% 0.125W Thick</field>
+        <field name="pn">RC0805FR-07220KL</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="RES_100K_1%_0.125W_Thick_0805-rk" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5C8FDC77</tstamp>
+    </comp>
+    <comp ref="R132">
+      <value>RES_220K_1%_0.125W_Thick_0805</value>
+      <footprint>rklib:C0805-RES</footprint>
+      <fields>
+        <field name="Manufacturer">Yageo</field>
+        <field name="Value1">220K</field>
+        <field name="Value2">1% 0.125W Thick</field>
+        <field name="pn">RC0805FR-07220KL</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="RES_100K_1%_0.125W_Thick_0805-rk" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5C8FDC80</tstamp>
+    </comp>
+    <comp ref="IC101">
+      <value>74HC251</value>
+      <footprint>Package_SO:SOIC-16_3.9x9.9mm_P1.27mm</footprint>
+      <fields>
+        <field name="Manufacturer">Texas Instruments</field>
+        <field name="pn">SN74HC251DR</field>
+      </fields>
+      <libsource lib="74xx_IEEE" part="74251" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5C904A11</tstamp>
+    </comp>
+    <comp ref="X110">
+      <value>PLR135_T10</value>
+      <footprint>rklib:PLR135_T10</footprint>
+      <fields>
+        <field name="Manufacturer">Everlight Electronics Co Ltd</field>
+        <field name="pn">PLR135/T10</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="PLR135_T10-rkdev" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5C910C18</tstamp>
+    </comp>
+    <comp ref="L101">
+      <value>47u0</value>
+      <footprint>rklib:C0805-X7R</footprint>
+      <fields>
+        <field name="Manufacturer">Taiyo Yuden</field>
+        <field name="pn">LBR2012T470K</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="L-rkdev" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5C910DDF</tstamp>
+    </comp>
+    <comp ref="C109">
+      <value>CAP_100n_50V_X7R_0805</value>
+      <footprint>rklib:C0805-X7R</footprint>
+      <fields>
+        <field name="Manufacturer">KEMET</field>
+        <field name="Value1">100n</field>
+        <field name="Value2">5% 50V X7R</field>
+        <field name="digikey">399-1170-1-ND</field>
+        <field name="pn">C0805C104K5RACTU</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="CAP_100n_50V_X7R_0805-rk" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5C91186B</tstamp>
+    </comp>
+    <comp ref="X111">
+      <value>PLR135_T10</value>
+      <footprint>rklib:PLR135_T10</footprint>
+      <fields>
+        <field name="Manufacturer">Everlight Electronics Co Ltd</field>
+        <field name="pn">PLR135/T10</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="PLR135_T10-rkdev" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5C93C85D</tstamp>
+    </comp>
+    <comp ref="L102">
+      <value>47u0</value>
+      <footprint>rklib:C0805-X7R</footprint>
+      <fields>
+        <field name="Manufacturer">Taiyo Yuden</field>
+        <field name="pn">LBR2012T470K</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="L-rkdev" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5C93C864</tstamp>
+    </comp>
+    <comp ref="C110">
+      <value>CAP_100n_50V_X7R_0805</value>
+      <footprint>rklib:C0805-X7R</footprint>
+      <fields>
+        <field name="Manufacturer">KEMET</field>
+        <field name="Value1">100n</field>
+        <field name="Value2">5% 50V X7R</field>
+        <field name="digikey">399-1170-1-ND</field>
+        <field name="pn">C0805C104K5RACTU</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="CAP_100n_50V_X7R_0805-rk" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5C93C874</tstamp>
+    </comp>
+    <comp ref="X112">
+      <value>PLR135_T10</value>
+      <footprint>rklib:PLR135_T10</footprint>
+      <fields>
+        <field name="Manufacturer">Everlight Electronics Co Ltd</field>
+        <field name="pn">PLR135/T10</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="PLR135_T10-rkdev" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5C942E7E</tstamp>
+    </comp>
+    <comp ref="L103">
+      <value>47u0</value>
+      <footprint>rklib:C0805-X7R</footprint>
+      <fields>
+        <field name="Manufacturer">Taiyo Yuden</field>
+        <field name="pn">LBR2012T470K</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="L-rkdev" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5C942E85</tstamp>
+    </comp>
+    <comp ref="C111">
+      <value>CAP_100n_50V_X7R_0805</value>
+      <footprint>rklib:C0805-X7R</footprint>
+      <fields>
+        <field name="Manufacturer">KEMET</field>
+        <field name="Value1">100n</field>
+        <field name="Value2">5% 50V X7R</field>
+        <field name="digikey">399-1170-1-ND</field>
+        <field name="pn">C0805C104K5RACTU</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="CAP_100n_50V_X7R_0805-rk" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5C942E95</tstamp>
+    </comp>
+    <comp ref="X113">
+      <value>PLR135_T10</value>
+      <footprint>rklib:PLR135_T10</footprint>
+      <fields>
+        <field name="Manufacturer">Everlight Electronics Co Ltd</field>
+        <field name="pn">PLR135/T10</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="PLR135_T10-rkdev" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5C949F28</tstamp>
+    </comp>
+    <comp ref="L104">
+      <value>47u0</value>
+      <footprint>rklib:C0805-X7R</footprint>
+      <fields>
+        <field name="Manufacturer">Taiyo Yuden</field>
+        <field name="pn">LBR2012T470K</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="L-rkdev" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5C949F2F</tstamp>
+    </comp>
+    <comp ref="C112">
+      <value>CAP_100n_50V_X7R_0805</value>
+      <footprint>rklib:C0805-X7R</footprint>
+      <fields>
+        <field name="Manufacturer">KEMET</field>
+        <field name="Value1">100n</field>
+        <field name="Value2">5% 50V X7R</field>
+        <field name="digikey">399-1170-1-ND</field>
+        <field name="pn">C0805C104K5RACTU</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="CAP_100n_50V_X7R_0805-rk" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5C949F3F</tstamp>
+    </comp>
+    <comp ref="C113">
+      <value>CAP_100n_50V_X7R_0805</value>
+      <footprint>rklib:C0805-X7R</footprint>
+      <fields>
+        <field name="Manufacturer">KEMET</field>
+        <field name="Value1">100n</field>
+        <field name="Value2">5% 50V X7R</field>
+        <field name="digikey">399-1170-1-ND</field>
+        <field name="pn">C0805C104K5RACTU</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="CAP_100n_50V_X7R_0805-rk" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5C9C6233</tstamp>
+    </comp>
+    <comp ref="X114">
+      <value>CON_IDC26</value>
+      <footprint>rklib:IDC26</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Manufacturer">Bud Industries</field>
+        <field name="Value1">IDC26</field>
+        <field name="digikey">377-2269-ND</field>
+        <field name="pn">BC-32677</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="CON_IDC26-rk" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5C91AA65</tstamp>
+    </comp>
+    <comp ref="R25">
+      <value>RES_10K0_1%_0.125W_Thick_0805</value>
+      <footprint>rklib:C0805-RES</footprint>
+      <fields>
+        <field name="Manufacturer">Yageo</field>
+        <field name="Value1">10K0</field>
+        <field name="Value2">1% 0.125W Thick</field>
+        <field name="digikey">311-10.0KCRCT-ND</field>
+        <field name="pn">RC0805FR-0710KL</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="RES_10K0_1%_0.125W_Thick_0805-rk" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5CC9D87D</tstamp>
+    </comp>
+    <comp ref="R26">
+      <value>RES_10K0_1%_0.125W_Thick_0805</value>
+      <footprint>rklib:C0805-RES</footprint>
+      <fields>
+        <field name="Manufacturer">Yageo</field>
+        <field name="Value1">10K0</field>
+        <field name="Value2">1% 0.125W Thick</field>
+        <field name="digikey">311-10.0KCRCT-ND</field>
+        <field name="pn">RC0805FR-0710KL</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="RES_10K0_1%_0.125W_Thick_0805-rk" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5CCBCC73</tstamp>
+    </comp>
+    <comp ref="R27">
+      <value>RES_10K0_1%_0.125W_Thick_0805</value>
+      <footprint>rklib:C0805-RES</footprint>
+      <fields>
+        <field name="Manufacturer">Yageo</field>
+        <field name="Value1">10K0</field>
+        <field name="Value2">1% 0.125W Thick</field>
+        <field name="digikey">311-10.0KCRCT-ND</field>
+        <field name="pn">RC0805FR-0710KL</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="RES_10K0_1%_0.125W_Thick_0805-rk" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5CCFA8E9</tstamp>
+    </comp>
+    <comp ref="R28">
+      <value>RES_10K0_1%_0.125W_Thick_0805</value>
+      <footprint>rklib:C0805-RES</footprint>
+      <fields>
+        <field name="Manufacturer">Yageo</field>
+        <field name="Value1">10K0</field>
+        <field name="Value2">1% 0.125W Thick</field>
+        <field name="digikey">311-10.0KCRCT-ND</field>
+        <field name="pn">RC0805FR-0710KL</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="RES_10K0_1%_0.125W_Thick_0805-rk" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5CD17E2F</tstamp>
+    </comp>
+    <comp ref="C17">
+      <value>CAP_10n0_50V_X7R_0805</value>
+      <footprint>rklib:C0805-X7R</footprint>
+      <fields>
+        <field name="Manufacturer">Yageo</field>
+        <field name="Value1">10n0</field>
+        <field name="Value2">10% 50V X7R</field>
+        <field name="digikey">311-1136-1-ND</field>
+        <field name="pn">CC0805KRX7R9BB103</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="CAP_10n0_50V_X7R_0805-rk" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5CDCBCA4</tstamp>
+    </comp>
+    <comp ref="C18">
+      <value>CAP_10n0_50V_X7R_0805</value>
+      <footprint>rklib:C0805-X7R</footprint>
+      <fields>
+        <field name="Manufacturer">Yageo</field>
+        <field name="Value1">10n0</field>
+        <field name="Value2">10% 50V X7R</field>
+        <field name="digikey">311-1136-1-ND</field>
+        <field name="pn">CC0805KRX7R9BB103</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="CAP_10n0_50V_X7R_0805-rk" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5CDCBF94</tstamp>
+    </comp>
+    <comp ref="C19">
+      <value>CAP_10n0_50V_X7R_0805</value>
+      <footprint>rklib:C0805-X7R</footprint>
+      <fields>
+        <field name="Manufacturer">Yageo</field>
+        <field name="Value1">10n0</field>
+        <field name="Value2">10% 50V X7R</field>
+        <field name="digikey">311-1136-1-ND</field>
+        <field name="pn">CC0805KRX7R9BB103</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="CAP_10n0_50V_X7R_0805-rk" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5CDE9EB2</tstamp>
+    </comp>
+    <comp ref="C20">
+      <value>CAP_10n0_50V_X7R_0805</value>
+      <footprint>rklib:C0805-X7R</footprint>
+      <fields>
+        <field name="Manufacturer">Yageo</field>
+        <field name="Value1">10n0</field>
+        <field name="Value2">10% 50V X7R</field>
+        <field name="digikey">311-1136-1-ND</field>
+        <field name="pn">CC0805KRX7R9BB103</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="CAP_10n0_50V_X7R_0805-rk" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5CE080B1</tstamp>
+    </comp>
+    <comp ref="R29">
+      <value>RES_33R0_1%_0.125W_Thick_0805</value>
+      <footprint>rklib:C0805-RES</footprint>
+      <fields>
+        <field name="Manufacturer">Yageo</field>
+        <field name="Value1">33R0</field>
+        <field name="Value2">1% 0.125W Thick</field>
+        <field name="digikey">311-33.0CRCT-ND</field>
+        <field name="pn">RC0805FR-0733RL</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="RES_33R0_1%_0.125W_Thick_0805-rk" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5D075D29</tstamp>
+    </comp>
+    <comp ref="C22">
+      <value>CAP_100n_50V_X7R_0805</value>
+      <footprint>rklib:C0805-X7R</footprint>
+      <fields>
+        <field name="Manufacturer">KEMET</field>
+        <field name="Value1">100n</field>
+        <field name="Value2">5% 50V X7R</field>
+        <field name="digikey">399-1170-1-ND</field>
+        <field name="pn">C0805C104K5RACTU</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="CAP_100n_50V_X7R_0805-rk" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5C9472BB</tstamp>
+    </comp>
+    <comp ref="C21">
+      <value>CAP_10u0_25V_X5R_0805</value>
+      <footprint>rklib:C0805-X7R</footprint>
+      <fields>
+        <field name="Manufacturer">Murata Electronics North America</field>
+        <field name="Value1">10u0</field>
+        <field name="Value2">20% 25V X5R</field>
+        <field name="digikey">490-10748-1-ND</field>
+        <field name="pn">GRM21BR61E106MA73L</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="CAP_10u0_25V_X5R_0805-rk" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5C9472C7</tstamp>
+    </comp>
+    <comp ref="C23">
+      <value>CAP_10u0_25V_X5R_0805</value>
+      <footprint>rklib:C0805-X7R</footprint>
+      <fields>
+        <field name="Manufacturer">Murata Electronics North America</field>
+        <field name="Value1">10u0</field>
+        <field name="Value2">20% 25V X5R</field>
+        <field name="digikey">490-10748-1-ND</field>
+        <field name="pn">GRM21BR61E106MA73L</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="CAP_10u0_25V_X5R_0805-rk" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5C9472D3</tstamp>
+    </comp>
+    <comp ref="IC5">
+      <value>IC_NCP1117LPST33</value>
+      <footprint>rklib:SOT223</footprint>
+      <fields>
+        <field name="Manufacturer">ON Semiconductor</field>
+        <field name="Value1">NCP1117LPST33</field>
+        <field name="Value2">LDO</field>
+        <field name="digikey">NCP1117LPST33T3GOSCT-ND</field>
+        <field name="pn">NCP1117LPST33T3G</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="IC_NCP1117LPST33-rk" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5C9472DF</tstamp>
+    </comp>
+    <comp ref="X5">
+      <value>MicroMatch14</value>
+      <footprint>rklib:MM-14G</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Manufacturer">TE Connectivity AMP Connectors</field>
+        <field name="Value1">MicroMatch-14</field>
+        <field name="Value2">-</field>
+        <field name="pn">1-215079-4</field>
+      </fields>
+      <libsource lib="Connector_Generic" part="Conn_02x07_Odd_Even" description="Generic connector, double row, 02x07, odd/even pin numbering scheme (row 1 odd numbers, row 2 even numbers), script generated (kicad-library-utils/schlib/autogen/connector/)"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5D0C6DF0</tstamp>
+    </comp>
+    <comp ref="X6">
+      <value>HDR_02x08</value>
+      <footprint>rklib:IDC2x8_Pitch2.54mm</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Manufacturer">On Shore Technology Inc.</field>
+        <field name="pn">302-S161</field>
+      </fields>
+      <libsource lib="Connector_Generic" part="Conn_02x08_Odd_Even" description="Generic connector, double row, 02x08, odd/even pin numbering scheme (row 1 odd numbers, row 2 even numbers), script generated (kicad-library-utils/schlib/autogen/connector/)"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5D0C7593</tstamp>
+    </comp>
+    <comp ref="IC6">
+      <value>PCA9536D</value>
+      <footprint>rklib:SOIC8_3.9x4.9mm_Pitch1.27mm</footprint>
+      <datasheet>http://www.nxp.com/documents/data_sheet/PCA9536.pdf</datasheet>
+      <fields>
+        <field name="Manufacturer">Texas Instruments</field>
+        <field name="pn">PCA9536DR</field>
+      </fields>
+      <libsource lib="Interface_Expansion" part="PCA9536D" description="4-bit I2C-bus and SMBus IO port, SOIC8 package"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5CA2E908</tstamp>
+    </comp>
+    <comp ref="C24">
+      <value>CAP_100n_50V_X7R_0805</value>
+      <footprint>rklib:C0805-X7R</footprint>
+      <fields>
+        <field name="Manufacturer">KEMET</field>
+        <field name="Value1">100n</field>
+        <field name="Value2">5% 50V X7R</field>
+        <field name="digikey">399-1170-1-ND</field>
+        <field name="pn">C0805C104K5RACTU</field>
+      </fields>
+      <libsource lib="AddOnB-rescue" part="CAP_100n_50V_X7R_0805-rk" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5CA8B9C7</tstamp>
+    </comp>
+    <comp ref="B1">
+      <value>Montagewinkel</value>
+      <footprint>rklib:Montagewinkel</footprint>
+      <datasheet>~</datasheet>
+      <libsource lib="Connector" part="TestPoint" description="test point"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5C9306F4</tstamp>
+    </comp>
+    <comp ref="B3">
+      <value>Montagewinkel</value>
+      <footprint>rklib:Montagewinkel</footprint>
+      <datasheet>~</datasheet>
+      <libsource lib="Connector" part="TestPoint" description="test point"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5D4520DA</tstamp>
+    </comp>
+    <comp ref="B2">
+      <value>Montagewinkel</value>
+      <footprint>rklib:Montagewinkel</footprint>
+      <datasheet>~</datasheet>
+      <libsource lib="Connector" part="TestPoint" description="test point"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5D45D3AB</tstamp>
+    </comp>
+    <comp ref="B4">
+      <value>Montagewinkel</value>
+      <footprint>rklib:Montagewinkel</footprint>
+      <datasheet>~</datasheet>
+      <libsource lib="Connector" part="TestPoint" description="test point"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5D468409</tstamp>
+    </comp>
+  </components>
+  <libparts>
+    <libpart lib="74xx_IEEE" part="74251">
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">74251</field>
+      </fields>
+      <pins>
+        <pin num="1" name="I3" type="input"/>
+        <pin num="2" name="I2" type="input"/>
+        <pin num="3" name="I1" type="input"/>
+        <pin num="4" name="I0" type="input"/>
+        <pin num="5" name="Q" type="3state"/>
+        <pin num="6" name="~Q" type="3state"/>
+        <pin num="7" name="~E" type="input"/>
+        <pin num="8" name="GND" type="power_in"/>
+        <pin num="9" name="S2" type="input"/>
+        <pin num="10" name="S1" type="input"/>
+        <pin num="11" name="S0" type="input"/>
+        <pin num="12" name="I7" type="input"/>
+        <pin num="13" name="I6" type="input"/>
+        <pin num="14" name="I5" type="input"/>
+        <pin num="15" name="I4" type="input"/>
+        <pin num="16" name="VCC" type="power_in"/>
+      </pins>
+    </libpart>
+    <libpart lib="AddOnB-rescue" part="CAP_100n_50V_X7R_0805-rk">
+      <footprints>
+        <fp>C_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">C</field>
+        <field name="Value">CAP_100n_50V_X7R_0805-rk</field>
+        <field name="Footprint">rklib:C0805-X7R</field>
+        <field name="Value1">100n</field>
+        <field name="Value2">5% 50V X7R</field>
+        <field name="digikey">399-1170-1-ND</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~" type="passive"/>
+        <pin num="2" name="~" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="AddOnB-rescue" part="CAP_100p_50V_C0G_NP0_0805-rk">
+      <footprints>
+        <fp>C_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">C</field>
+        <field name="Value">CAP_100p_50V_C0G_NP0_0805-rk</field>
+        <field name="Footprint">rklib:C0805-X7R</field>
+        <field name="Value1">100p</field>
+        <field name="Value2">5% 50V C0G/NP0</field>
+        <field name="digikey">399-1122-1-ND</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~" type="passive"/>
+        <pin num="2" name="~" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="AddOnB-rescue" part="CAP_10n0_50V_X7R_0805-rk">
+      <footprints>
+        <fp>C_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">C</field>
+        <field name="Value">CAP_10n0_50V_X7R_0805-rk</field>
+        <field name="Footprint">rklib:C0805-X7R</field>
+        <field name="Value1">10n0</field>
+        <field name="Value2">10% 50V X7R</field>
+        <field name="digikey">311-1136-1-ND</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~" type="passive"/>
+        <pin num="2" name="~" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="AddOnB-rescue" part="CAP_10u0_25V_X5R_0805-rk">
+      <footprints>
+        <fp>C_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">C</field>
+        <field name="Value">CAP_10u0_25V_X5R_0805-rk</field>
+        <field name="Footprint">rklib:C0805-X7R</field>
+        <field name="Value1">10u0</field>
+        <field name="Value2">20% 25V X5R</field>
+        <field name="digikey">490-10748-1-ND</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~" type="passive"/>
+        <pin num="2" name="~" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="AddOnB-rescue" part="CONN_RCA_02x04-rkdev">
+      <fields>
+        <field name="Reference">X</field>
+        <field name="Value">CONN_RCA_02x04-rkdev</field>
+      </fields>
+      <pins>
+        <pin num="1A" name="T1" type="input"/>
+        <pin num="1B" name="T1" type="input"/>
+        <pin num="1C" name="T1" type="input"/>
+        <pin num="1D" name="T1" type="input"/>
+        <pin num="2A" name="T2" type="input"/>
+        <pin num="2B" name="T2" type="input"/>
+        <pin num="2C" name="T2" type="input"/>
+        <pin num="2D" name="T2" type="input"/>
+        <pin num="3A" name="GND" type="input"/>
+        <pin num="3B" name="GND" type="input"/>
+        <pin num="3C" name="GND" type="input"/>
+        <pin num="3D" name="GND" type="input"/>
+      </pins>
+    </libpart>
+    <libpart lib="AddOnB-rescue" part="CON_IDC26-rk">
+      <footprints>
+        <fp>Connector*:*2x??x*mm*</fp>
+        <fp>Connector*:*2x???Pitch*</fp>
+        <fp>Pin_Header_Straight_2X*</fp>
+        <fp>Pin_Header_Angled_2X*</fp>
+        <fp>Socket_Strip_Straight_2X*</fp>
+        <fp>Socket_Strip_Angled_2X*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">X</field>
+        <field name="Value">CON_IDC26-rk</field>
+        <field name="Footprint">rklib:IDC26</field>
+        <field name="Value1">IDC26</field>
+        <field name="digikey">377-2269-ND</field>
+      </fields>
+      <pins>
+        <pin num="1" name="Pin_1" type="passive"/>
+        <pin num="2" name="Pin_2" type="passive"/>
+        <pin num="3" name="Pin_3" type="passive"/>
+        <pin num="4" name="Pin_4" type="passive"/>
+        <pin num="5" name="Pin_5" type="passive"/>
+        <pin num="6" name="Pin_6" type="passive"/>
+        <pin num="7" name="Pin_7" type="passive"/>
+        <pin num="8" name="Pin_8" type="passive"/>
+        <pin num="9" name="Pin_9" type="passive"/>
+        <pin num="10" name="Pin_10" type="passive"/>
+        <pin num="11" name="Pin_11" type="passive"/>
+        <pin num="12" name="Pin_12" type="passive"/>
+        <pin num="13" name="Pin_13" type="passive"/>
+        <pin num="14" name="Pin_14" type="passive"/>
+        <pin num="15" name="Pin_15" type="passive"/>
+        <pin num="16" name="Pin_16" type="passive"/>
+        <pin num="17" name="Pin_17" type="passive"/>
+        <pin num="18" name="Pin_18" type="passive"/>
+        <pin num="19" name="Pin_19" type="passive"/>
+        <pin num="20" name="Pin_20" type="passive"/>
+        <pin num="21" name="Pin_21" type="passive"/>
+        <pin num="22" name="Pin_22" type="passive"/>
+        <pin num="23" name="Pin_23" type="passive"/>
+        <pin num="24" name="Pin_24" type="passive"/>
+        <pin num="25" name="Pin_25" type="passive"/>
+        <pin num="26" name="Pin_26" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="AddOnB-rescue" part="IC_NCP1117LPST33-rk">
+      <footprints>
+        <fp>SOT*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">IC</field>
+        <field name="Value">IC_NCP1117LPST33-rk</field>
+        <field name="Footprint">rklib:SOT223</field>
+        <field name="Value1">NCP1117LPST33</field>
+        <field name="digikey">NCP1117LPST33T3GOSCT-ND</field>
+        <field name="Value2">LDO</field>
+      </fields>
+      <pins>
+        <pin num="1" name="GND" type="input"/>
+        <pin num="2" name="OUT" type="power_out"/>
+        <pin num="3" name="IN" type="input"/>
+        <pin num="4" name="OUT" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="AddOnB-rescue" part="L-rkdev">
+      <footprints>
+        <fp>R_*</fp>
+        <fp>Resistor_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">L</field>
+        <field name="Value">L-rkdev</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~" type="passive"/>
+        <pin num="2" name="~" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="AddOnB-rescue" part="PLR135_T10-rkdev">
+      <fields>
+        <field name="Reference">X</field>
+        <field name="Value">PLR135_T10-rkdev</field>
+      </fields>
+      <pins>
+        <pin num="1" name="VCC" type="input"/>
+        <pin num="2" name="GND" type="input"/>
+        <pin num="3" name="VOUT" type="input"/>
+      </pins>
+    </libpart>
+    <libpart lib="AddOnB-rescue" part="RES_100K_1%_0.125W_Thick_0805-rk">
+      <footprints>
+        <fp>R_*</fp>
+        <fp>Resistor_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">R</field>
+        <field name="Value">RES_100K_1%_0.125W_Thick_0805-rk</field>
+        <field name="Footprint">rklib:C0805-RES</field>
+        <field name="Value1">100K</field>
+        <field name="Value2">1% 0.125W Thick</field>
+        <field name="digikey">311-100KCRCT-ND</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~" type="passive"/>
+        <pin num="2" name="~" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="AddOnB-rescue" part="RES_100R_1%_0.25W_Thin_0805-rk">
+      <footprints>
+        <fp>R_*</fp>
+        <fp>Resistor_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">R</field>
+        <field name="Value">RES_100R_1%_0.25W_Thin_0805-rk</field>
+        <field name="Footprint">rklib:C0805-RES</field>
+        <field name="Value1">100R</field>
+        <field name="Value2">1% 0.25W Thin</field>
+        <field name="digikey">RNCP0805FTD100RCT-ND</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~" type="passive"/>
+        <pin num="2" name="~" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="AddOnB-rescue" part="RES_10K0_1%_0.125W_Thick_0805-rk">
+      <footprints>
+        <fp>R_*</fp>
+        <fp>Resistor_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">R</field>
+        <field name="Value">RES_10K0_1%_0.125W_Thick_0805-rk</field>
+        <field name="Footprint">rklib:C0805-RES</field>
+        <field name="Value1">10K0</field>
+        <field name="Value2">1% 0.125W Thick</field>
+        <field name="digikey">311-10.0KCRCT-ND</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~" type="passive"/>
+        <pin num="2" name="~" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="AddOnB-rescue" part="RES_33R0_1%_0.125W_Thick_0805-rk">
+      <footprints>
+        <fp>R_*</fp>
+        <fp>Resistor_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">R</field>
+        <field name="Value">RES_33R0_1%_0.125W_Thick_0805-rk</field>
+        <field name="Footprint">rklib:C0805-RES</field>
+        <field name="Value1">33R0</field>
+        <field name="Value2">1% 0.125W Thick</field>
+        <field name="digikey">311-33.0CRCT-ND</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~" type="passive"/>
+        <pin num="2" name="~" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Connector" part="TestPoint">
+      <description>test point</description>
+      <docs>~</docs>
+      <footprints>
+        <fp>Pin*</fp>
+        <fp>Test*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">TP</field>
+        <field name="Value">TestPoint</field>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Connector_Generic" part="Conn_02x07_Odd_Even">
+      <description>Generic connector, double row, 02x07, odd/even pin numbering scheme (row 1 odd numbers, row 2 even numbers), script generated (kicad-library-utils/schlib/autogen/connector/)</description>
+      <docs>~</docs>
+      <footprints>
+        <fp>Connector*:*_2x??_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">Conn_02x07_Odd_Even</field>
+      </fields>
+      <pins>
+        <pin num="1" name="Pin_1" type="passive"/>
+        <pin num="2" name="Pin_2" type="passive"/>
+        <pin num="3" name="Pin_3" type="passive"/>
+        <pin num="4" name="Pin_4" type="passive"/>
+        <pin num="5" name="Pin_5" type="passive"/>
+        <pin num="6" name="Pin_6" type="passive"/>
+        <pin num="7" name="Pin_7" type="passive"/>
+        <pin num="8" name="Pin_8" type="passive"/>
+        <pin num="9" name="Pin_9" type="passive"/>
+        <pin num="10" name="Pin_10" type="passive"/>
+        <pin num="11" name="Pin_11" type="passive"/>
+        <pin num="12" name="Pin_12" type="passive"/>
+        <pin num="13" name="Pin_13" type="passive"/>
+        <pin num="14" name="Pin_14" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Connector_Generic" part="Conn_02x08_Odd_Even">
+      <description>Generic connector, double row, 02x08, odd/even pin numbering scheme (row 1 odd numbers, row 2 even numbers), script generated (kicad-library-utils/schlib/autogen/connector/)</description>
+      <docs>~</docs>
+      <footprints>
+        <fp>Connector*:*_2x??_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">Conn_02x08_Odd_Even</field>
+      </fields>
+      <pins>
+        <pin num="1" name="Pin_1" type="passive"/>
+        <pin num="2" name="Pin_2" type="passive"/>
+        <pin num="3" name="Pin_3" type="passive"/>
+        <pin num="4" name="Pin_4" type="passive"/>
+        <pin num="5" name="Pin_5" type="passive"/>
+        <pin num="6" name="Pin_6" type="passive"/>
+        <pin num="7" name="Pin_7" type="passive"/>
+        <pin num="8" name="Pin_8" type="passive"/>
+        <pin num="9" name="Pin_9" type="passive"/>
+        <pin num="10" name="Pin_10" type="passive"/>
+        <pin num="11" name="Pin_11" type="passive"/>
+        <pin num="12" name="Pin_12" type="passive"/>
+        <pin num="13" name="Pin_13" type="passive"/>
+        <pin num="14" name="Pin_14" type="passive"/>
+        <pin num="15" name="Pin_15" type="passive"/>
+        <pin num="16" name="Pin_16" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Interface_Expansion" part="PCA9536D">
+      <description>4-bit I2C-bus and SMBus IO port, SOIC8 package</description>
+      <docs>http://www.nxp.com/documents/data_sheet/PCA9536.pdf</docs>
+      <footprints>
+        <fp>SOIC*3.9x4.9mm*P1.27mm*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">PCA9536D</field>
+        <field name="Footprint">Package_SO:SOIC-8_3.9x4.9mm_P1.27mm</field>
+      </fields>
+      <pins>
+        <pin num="1" name="IO0" type="BiDi"/>
+        <pin num="2" name="IO1" type="BiDi"/>
+        <pin num="3" name="IO2" type="BiDi"/>
+        <pin num="4" name="VSS" type="power_in"/>
+        <pin num="5" name="IO3" type="BiDi"/>
+        <pin num="6" name="SCL" type="BiDi"/>
+        <pin num="7" name="SDA" type="BiDi"/>
+        <pin num="8" name="VDD" type="power_in"/>
+      </pins>
+    </libpart>
+  </libparts>
+  <libraries>
+    <library logical="74xx_IEEE">
+      <uri>/Library/Application Support/kicad/library/74xx_IEEE.lib</uri>
+    </library>
+    <library logical="AddOnB-rescue">
+      <uri>/Users/bjornhijmans/Documents/Privé/electronica/dsp_rpi_ncore_amp/IO/AddOnB-rescue.lib</uri>
+    </library>
+    <library logical="Connector">
+      <uri>/Library/Application Support/kicad/library/Connector.lib</uri>
+    </library>
+    <library logical="Connector_Generic">
+      <uri>/Library/Application Support/kicad/library/Connector_Generic.lib</uri>
+    </library>
+    <library logical="Interface_Expansion">
+      <uri>/Library/Application Support/kicad/library/Interface_Expansion.lib</uri>
+    </library>
+  </libraries>
+  <nets>
+    <net code="1" name="Net-(R117-Pad1)">
+      <node ref="X109" pin="2A"/>
+      <node ref="R117" pin="1"/>
+    </net>
+    <net code="2" name="Net-(R119-Pad1)">
+      <node ref="X109" pin="1A"/>
+      <node ref="R119" pin="1"/>
+    </net>
+    <net code="3" name="GND">
+      <node ref="X5" pin="6"/>
+      <node ref="X109" pin="3C"/>
+      <node ref="X109" pin="3D"/>
+      <node ref="X109" pin="3B"/>
+      <node ref="X114" pin="11"/>
+      <node ref="X114" pin="14"/>
+      <node ref="C101" pin="2"/>
+      <node ref="C102" pin="2"/>
+      <node ref="R118" pin="1"/>
+      <node ref="R120" pin="1"/>
+      <node ref="X114" pin="15"/>
+      <node ref="X114" pin="17"/>
+      <node ref="X114" pin="18"/>
+      <node ref="X109" pin="3A"/>
+      <node ref="X114" pin="2"/>
+      <node ref="X114" pin="20"/>
+      <node ref="X114" pin="21"/>
+      <node ref="X114" pin="23"/>
+      <node ref="C103" pin="2"/>
+      <node ref="C104" pin="2"/>
+      <node ref="R122" pin="1"/>
+      <node ref="R124" pin="1"/>
+      <node ref="X114" pin="24"/>
+      <node ref="X114" pin="3"/>
+      <node ref="X114" pin="5"/>
+      <node ref="C113" pin="1"/>
+      <node ref="C105" pin="2"/>
+      <node ref="C106" pin="2"/>
+      <node ref="R126" pin="1"/>
+      <node ref="R128" pin="1"/>
+      <node ref="C107" pin="2"/>
+      <node ref="C24" pin="1"/>
+      <node ref="C108" pin="2"/>
+      <node ref="R130" pin="1"/>
+      <node ref="R132" pin="1"/>
+      <node ref="IC6" pin="4"/>
+      <node ref="X6" pin="8"/>
+      <node ref="X6" pin="6"/>
+      <node ref="X6" pin="4"/>
+      <node ref="X6" pin="2"/>
+      <node ref="X6" pin="16"/>
+      <node ref="X6" pin="14"/>
+      <node ref="X6" pin="12"/>
+      <node ref="X6" pin="10"/>
+      <node ref="X5" pin="8"/>
+      <node ref="X114" pin="12"/>
+      <node ref="X5" pin="4"/>
+      <node ref="X5" pin="14"/>
+      <node ref="X5" pin="12"/>
+      <node ref="X5" pin="10"/>
+      <node ref="IC101" pin="7"/>
+      <node ref="IC101" pin="8"/>
+      <node ref="X110" pin="2"/>
+      <node ref="C109" pin="2"/>
+      <node ref="X111" pin="2"/>
+      <node ref="C110" pin="2"/>
+      <node ref="X112" pin="2"/>
+      <node ref="C111" pin="2"/>
+      <node ref="X113" pin="2"/>
+      <node ref="IC5" pin="1"/>
+      <node ref="C112" pin="2"/>
+      <node ref="C23" pin="2"/>
+      <node ref="C21" pin="2"/>
+      <node ref="C22" pin="2"/>
+      <node ref="X114" pin="9"/>
+      <node ref="X114" pin="8"/>
+      <node ref="X114" pin="6"/>
+    </net>
+    <net code="4" name="/AIN1+">
+      <node ref="R117" pin="2"/>
+      <node ref="C101" pin="1"/>
+      <node ref="X114" pin="22"/>
+      <node ref="R118" pin="2"/>
+    </net>
+    <net code="5" name="/AIN2+">
+      <node ref="R119" pin="2"/>
+      <node ref="C102" pin="1"/>
+      <node ref="R120" pin="2"/>
+      <node ref="X114" pin="19"/>
+    </net>
+    <net code="6" name="Net-(R121-Pad1)">
+      <node ref="X109" pin="2B"/>
+      <node ref="R121" pin="1"/>
+    </net>
+    <net code="7" name="Net-(R123-Pad1)">
+      <node ref="R123" pin="1"/>
+      <node ref="X109" pin="1B"/>
+    </net>
+    <net code="8" name="/AIN3+">
+      <node ref="R122" pin="2"/>
+      <node ref="C103" pin="1"/>
+      <node ref="R121" pin="2"/>
+      <node ref="X114" pin="16"/>
+    </net>
+    <net code="9" name="/AIN4+">
+      <node ref="R123" pin="2"/>
+      <node ref="C104" pin="1"/>
+      <node ref="R124" pin="2"/>
+      <node ref="X114" pin="13"/>
+    </net>
+    <net code="10" name="Net-(R125-Pad1)">
+      <node ref="X109" pin="2C"/>
+      <node ref="R125" pin="1"/>
+    </net>
+    <net code="11" name="Net-(R127-Pad1)">
+      <node ref="R127" pin="1"/>
+      <node ref="X109" pin="1C"/>
+    </net>
+    <net code="12" name="/AIN5+">
+      <node ref="R125" pin="2"/>
+      <node ref="C105" pin="1"/>
+      <node ref="R126" pin="2"/>
+      <node ref="X114" pin="10"/>
+    </net>
+    <net code="13" name="/AIN6+">
+      <node ref="X114" pin="7"/>
+      <node ref="R128" pin="2"/>
+      <node ref="C106" pin="1"/>
+      <node ref="R127" pin="2"/>
+    </net>
+    <net code="14" name="Net-(R129-Pad1)">
+      <node ref="X109" pin="2D"/>
+      <node ref="R129" pin="1"/>
+    </net>
+    <net code="15" name="Net-(R131-Pad1)">
+      <node ref="X109" pin="1D"/>
+      <node ref="R131" pin="1"/>
+    </net>
+    <net code="16" name="/AIN7+">
+      <node ref="X114" pin="4"/>
+      <node ref="R130" pin="2"/>
+      <node ref="R129" pin="2"/>
+      <node ref="C107" pin="1"/>
+    </net>
+    <net code="17" name="/AIN8+">
+      <node ref="X114" pin="1"/>
+      <node ref="R132" pin="2"/>
+      <node ref="R131" pin="2"/>
+      <node ref="C108" pin="1"/>
+    </net>
+    <net code="18" name="Net-(IC101-Pad6)">
+      <node ref="IC101" pin="6"/>
+    </net>
+    <net code="19" name="Net-(IC101-Pad5)">
+      <node ref="IC101" pin="5"/>
+      <node ref="R29" pin="1"/>
+    </net>
+    <net code="20" name="Net-(IC101-Pad12)">
+      <node ref="IC101" pin="12"/>
+    </net>
+    <net code="21" name="Net-(IC101-Pad13)">
+      <node ref="IC101" pin="13"/>
+    </net>
+    <net code="22" name="Net-(IC101-Pad14)">
+      <node ref="IC101" pin="14"/>
+    </net>
+    <net code="23" name="Net-(IC101-Pad15)">
+      <node ref="IC101" pin="15"/>
+    </net>
+    <net code="24" name="Net-(C109-Pad1)">
+      <node ref="X110" pin="1"/>
+      <node ref="L101" pin="2"/>
+      <node ref="C109" pin="1"/>
+    </net>
+    <net code="25" name="+3V3">
+      <node ref="R26" pin="2"/>
+      <node ref="C22" pin="1"/>
+      <node ref="C24" pin="2"/>
+      <node ref="C23" pin="1"/>
+      <node ref="R25" pin="2"/>
+      <node ref="IC5" pin="2"/>
+      <node ref="IC5" pin="4"/>
+      <node ref="R27" pin="2"/>
+      <node ref="L104" pin="1"/>
+      <node ref="L102" pin="1"/>
+      <node ref="L103" pin="1"/>
+      <node ref="R28" pin="2"/>
+      <node ref="C113" pin="2"/>
+      <node ref="IC101" pin="16"/>
+      <node ref="IC6" pin="8"/>
+      <node ref="L101" pin="1"/>
+    </net>
+    <net code="26" name="Net-(C110-Pad1)">
+      <node ref="X111" pin="1"/>
+      <node ref="L102" pin="2"/>
+      <node ref="C110" pin="1"/>
+    </net>
+    <net code="27" name="Net-(C111-Pad1)">
+      <node ref="L103" pin="2"/>
+      <node ref="X112" pin="1"/>
+      <node ref="C111" pin="1"/>
+    </net>
+    <net code="28" name="Net-(C112-Pad1)">
+      <node ref="X113" pin="1"/>
+      <node ref="L104" pin="2"/>
+      <node ref="C112" pin="1"/>
+    </net>
+    <net code="29" name="Net-(X114-Pad25)">
+      <node ref="X114" pin="25"/>
+    </net>
+    <net code="30" name="Net-(X114-Pad26)">
+      <node ref="X114" pin="26"/>
+    </net>
+    <net code="31" name="Net-(C17-Pad1)">
+      <node ref="C17" pin="1"/>
+      <node ref="R25" pin="1"/>
+      <node ref="X110" pin="3"/>
+    </net>
+    <net code="32" name="Net-(C17-Pad2)">
+      <node ref="IC101" pin="4"/>
+      <node ref="C17" pin="2"/>
+    </net>
+    <net code="33" name="Net-(C18-Pad1)">
+      <node ref="R26" pin="1"/>
+      <node ref="X111" pin="3"/>
+      <node ref="C18" pin="1"/>
+    </net>
+    <net code="34" name="Net-(C18-Pad2)">
+      <node ref="C18" pin="2"/>
+      <node ref="IC101" pin="3"/>
+    </net>
+    <net code="35" name="Net-(C19-Pad1)">
+      <node ref="R27" pin="1"/>
+      <node ref="X112" pin="3"/>
+      <node ref="C19" pin="1"/>
+    </net>
+    <net code="36" name="Net-(C19-Pad2)">
+      <node ref="C19" pin="2"/>
+      <node ref="IC101" pin="2"/>
+    </net>
+    <net code="37" name="Net-(C20-Pad1)">
+      <node ref="C20" pin="1"/>
+      <node ref="R28" pin="1"/>
+      <node ref="X113" pin="3"/>
+    </net>
+    <net code="38" name="Net-(C20-Pad2)">
+      <node ref="C20" pin="2"/>
+      <node ref="IC101" pin="1"/>
+    </net>
+    <net code="39" name="+12V">
+      <node ref="X6" pin="1"/>
+      <node ref="IC5" pin="3"/>
+      <node ref="C21" pin="1"/>
+    </net>
+    <net code="40" name="/SPDIF_TX">
+      <node ref="X5" pin="11"/>
+    </net>
+    <net code="41" name="/SPDIF_RX">
+      <node ref="R29" pin="2"/>
+      <node ref="X5" pin="13"/>
+    </net>
+    <net code="42" name="/WCLK_TX">
+      <node ref="X5" pin="7"/>
+    </net>
+    <net code="43" name="/WCLK_RX">
+      <node ref="X5" pin="9"/>
+    </net>
+    <net code="44" name="/OPTICAL_TX">
+      <node ref="X5" pin="3"/>
+    </net>
+    <net code="45" name="/OPTICAL_RX">
+      <node ref="X5" pin="5"/>
+    </net>
+    <net code="46" name="/MDI:3">
+      <node ref="X6" pin="3"/>
+    </net>
+    <net code="47" name="/MDO:3">
+      <node ref="X6" pin="5"/>
+    </net>
+    <net code="48" name="/BCLK:3">
+      <node ref="X6" pin="7"/>
+    </net>
+    <net code="49" name="/LRCK:3">
+      <node ref="X6" pin="9"/>
+    </net>
+    <net code="50" name="/SDA">
+      <node ref="X6" pin="11"/>
+      <node ref="IC6" pin="7"/>
+    </net>
+    <net code="51" name="/SCL">
+      <node ref="X6" pin="13"/>
+      <node ref="IC6" pin="6"/>
+    </net>
+    <net code="52" name="/MCLK">
+      <node ref="X6" pin="15"/>
+    </net>
+    <net code="53" name="Net-(X5-Pad1)">
+      <node ref="X5" pin="1"/>
+    </net>
+    <net code="54" name="Net-(X5-Pad2)">
+      <node ref="X5" pin="2"/>
+    </net>
+    <net code="55" name="Net-(IC101-Pad11)">
+      <node ref="IC6" pin="1"/>
+      <node ref="IC101" pin="11"/>
+    </net>
+    <net code="56" name="Net-(IC101-Pad10)">
+      <node ref="IC6" pin="2"/>
+      <node ref="IC101" pin="10"/>
+    </net>
+    <net code="57" name="Net-(IC101-Pad9)">
+      <node ref="IC6" pin="3"/>
+      <node ref="IC101" pin="9"/>
+    </net>
+    <net code="58" name="Net-(IC6-Pad5)">
+      <node ref="IC6" pin="5"/>
+    </net>
+    <net code="59" name="Net-(B1-Pad1)">
+      <node ref="B1" pin="1"/>
+    </net>
+    <net code="60" name="Net-(B3-Pad1)">
+      <node ref="B3" pin="1"/>
+    </net>
+    <net code="61" name="Net-(B2-Pad1)">
+      <node ref="B2" pin="1"/>
+    </net>
+    <net code="62" name="Net-(B4-Pad1)">
+      <node ref="B4" pin="1"/>
+    </net>
+  </nets>
+</export>

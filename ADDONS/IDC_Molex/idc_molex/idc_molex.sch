@@ -1,0 +1,171 @@
+EESchema Schematic File Version 4
+EELAYER 29 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L Connector_Generic:Conn_02x13_Odd_Even J1
+U 1 1 5DED245C
+P 2950 3675
+F 0 "J1" H 3000 4492 50  0000 C CNN
+F 1 "Conn_02x13_Odd_Even" H 3000 4401 50  0000 C CNN
+F 2 "Connector_PinSocket_2.54mm:PinSocket_2x13_P2.54mm_Vertical" H 2950 3675 50  0001 C CNN
+F 3 "~" H 2950 3675 50  0001 C CNN
+	1    2950 3675
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector_Generic:Conn_01x04 J2
+U 1 1 5DED3E5C
+P 3000 4875
+F 0 "J2" H 3080 4867 50  0000 L CNN
+F 1 "Conn_01x04" H 3080 4776 50  0000 L CNN
+F 2 "Connector_Molex:Molex_Micro-Fit_3.0_43045-0400_2x02_P3.00mm_Horizontal" H 3000 4875 50  0001 C CNN
+F 3 "~" H 3000 4875 50  0001 C CNN
+	1    3000 4875
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector_Generic:Conn_01x04 J3
+U 1 1 5DED45A9
+P 3025 2250
+F 0 "J3" H 3105 2242 50  0000 L CNN
+F 1 "Conn_01x04" H 3105 2151 50  0000 L CNN
+F 2 "Connector_Molex:Molex_Micro-Fit_3.0_43045-0400_2x02_P3.00mm_Horizontal" H 3025 2250 50  0001 C CNN
+F 3 "~" H 3025 2250 50  0001 C CNN
+	1    3025 2250
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3250 3275 3550 3275
+Wire Wire Line
+	3550 3275 3550 3575
+Wire Wire Line
+	3250 3575 3550 3575
+Connection ~ 3550 3575
+Wire Wire Line
+	3550 3575 3550 3875
+Wire Wire Line
+	3250 3875 3550 3875
+Connection ~ 3550 3875
+Wire Wire Line
+	3550 3875 3550 4175
+Wire Wire Line
+	3250 4175 3550 4175
+Connection ~ 3550 4175
+Wire Wire Line
+	3550 4175 3550 4650
+Wire Wire Line
+	2750 3175 2400 3175
+Wire Wire Line
+	2400 3175 2400 3475
+Wire Wire Line
+	2750 3475 2400 3475
+Connection ~ 2400 3475
+Wire Wire Line
+	2400 3475 2400 3775
+Wire Wire Line
+	2750 3775 2400 3775
+Connection ~ 2400 3775
+Wire Wire Line
+	2400 3775 2400 4075
+Wire Wire Line
+	2750 4075 2400 4075
+Connection ~ 2400 4075
+Wire Wire Line
+	2400 4075 2400 4650
+$Comp
+L power:GND #PWR0101
+U 1 1 5DED65F8
+P 2400 4650
+F 0 "#PWR0101" H 2400 4400 50  0001 C CNN
+F 1 "GND" H 2405 4477 50  0000 C CNN
+F 2 "" H 2400 4650 50  0001 C CNN
+F 3 "" H 2400 4650 50  0001 C CNN
+	1    2400 4650
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR0102
+U 1 1 5DED6732
+P 3550 4650
+F 0 "#PWR0102" H 3550 4400 50  0001 C CNN
+F 1 "GND" H 3555 4477 50  0000 C CNN
+F 2 "" H 3550 4650 50  0001 C CNN
+F 3 "" H 3550 4650 50  0001 C CNN
+	1    3550 4650
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3250 4075 3375 4075
+Wire Wire Line
+	3375 4075 3375 4625
+Wire Wire Line
+	3375 4625 2700 4625
+Wire Wire Line
+	2700 4625 2700 4775
+Wire Wire Line
+	2700 4775 2800 4775
+Wire Wire Line
+	2750 4175 2575 4175
+Wire Wire Line
+	2575 4175 2575 4875
+Wire Wire Line
+	2575 4875 2800 4875
+Wire Wire Line
+	2800 5075 2625 5075
+Wire Wire Line
+	2625 5075 2625 5300
+$Comp
+L power:GND #PWR0103
+U 1 1 5DED8D87
+P 2625 5300
+F 0 "#PWR0103" H 2625 5050 50  0001 C CNN
+F 1 "GND" H 2630 5127 50  0000 C CNN
+F 2 "" H 2625 5300 50  0001 C CNN
+F 3 "" H 2625 5300 50  0001 C CNN
+	1    2625 5300
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2750 3975 1950 3975
+Wire Wire Line
+	1950 3975 1950 2150
+Wire Wire Line
+	1950 2150 2825 2150
+Wire Wire Line
+	3250 3975 3750 3975
+Wire Wire Line
+	3750 3975 3750 2825
+Wire Wire Line
+	3750 2825 2175 2825
+Wire Wire Line
+	2175 2825 2175 2250
+Wire Wire Line
+	2175 2250 2825 2250
+Wire Wire Line
+	2825 2450 2700 2450
+Wire Wire Line
+	2700 2450 2700 2550
+$Comp
+L power:GND #PWR0104
+U 1 1 5DEDC02C
+P 2700 2550
+F 0 "#PWR0104" H 2700 2300 50  0001 C CNN
+F 1 "GND" H 2705 2377 50  0000 C CNN
+F 2 "" H 2700 2550 50  0001 C CNN
+F 3 "" H 2700 2550 50  0001 C CNN
+	1    2700 2550
+	1    0    0    -1  
+$EndComp
+$EndSCHEMATC
