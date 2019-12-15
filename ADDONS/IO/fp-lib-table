@@ -1,0 +1,3 @@
+(fp_lib_table
+  (lib (name rklib)(type KiCad)(uri /Users/bjornhijmans/Documents/Privé/electronica/dsp_rpi_ncore_amp/IO)(options "")(descr ""))
+)
