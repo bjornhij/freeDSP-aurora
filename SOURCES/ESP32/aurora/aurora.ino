@@ -2316,7 +2316,7 @@ void loop()
         Serial.print("Sending to I2C: ");
         Serial.println(currentSerialLine);
         Serial.println(currentSerialLine.length());
-        
+        currentSerialLine = "";
       }
       else
       {
@@ -2324,6 +2324,7 @@ void loop()
         Serial.print(currentSerialLine.charAt(0));
         Serial.print(" : ");
         Serial.println(currentSerialLine);
+        currentSerialLine = "";
       }
     }
   }
