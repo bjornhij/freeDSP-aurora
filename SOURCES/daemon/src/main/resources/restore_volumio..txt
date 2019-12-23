@@ -1,0 +1,30 @@
+mkdir /home/volumio/daemon
+
+kopieer jar
+
+application.properties:
+
+server.port=9090
+volumiodaemon.initial_volume=10
+volumiodaemon.initial_input=Analog1
+volumiodaemon.volumio_url=http://localhost:3000/api/v1/
+
+spring-serial-port-connector.portName=/dev/ttyUSB0
+spring-serial-port-connector.baudRate=115200
+
+
+apt-get install openjdk-8-jre
+
+apt-get install screen
+
+daemon/start.sh
+
+#!/bin/bash
+
+cd /home/volumio/daemon
+
+/usr/bin/java -jar daemon-0.0.1-SNAPSHOT.jar
+
+in /etc/rc.local
+
+/usr/bin/screen -d -m /home/volumio/daemon/start.sh
