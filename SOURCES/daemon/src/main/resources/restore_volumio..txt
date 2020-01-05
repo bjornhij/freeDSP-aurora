@@ -1,3 +1,8 @@
+enable ssh
+
+http://hypex-amp.local/DEV
+
+
 mkdir /home/volumio/daemon
 
 kopieer jar
@@ -12,6 +17,7 @@ volumiodaemon.volumio_url=http://localhost:3000/api/v1/
 spring-serial-port-connector.portName=/dev/ttyUSB0
 spring-serial-port-connector.baudRate=115200
 
+apt-get update
 
 apt-get install openjdk-8-jre
 
@@ -28,3 +34,20 @@ cd /home/volumio/daemon
 in /etc/rc.local
 
 /usr/bin/screen -d -m /home/volumio/daemon/start.sh
+
+cd /home/volumio
+
+git clone https://github.com/bjornhij/volumio-plugins
+
+cd volumio-plugins/plugins/music_service/freedsp_aurora_control/
+
+volumio plugin install
+
+volumio vrestart
+
+curl -sSL https://pi4j.com/install | sudo bash
+
+cd /tmp
+wget https://unicorn.drogon.net/wiringpi-2.46-1.deb
+sudo dpkg -i wiringpi-2.46-1.deb
+

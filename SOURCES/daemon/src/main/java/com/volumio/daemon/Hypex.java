@@ -38,7 +38,7 @@ public class Hypex {
         final GpioController gpio = GpioFactory.getInstance();
 
         if(this.gpiopin == null)
-            this.gpiopin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_03, "AMPON", PinState.HIGH);
+            this.gpiopin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_09, "AMPON", PinState.HIGH);
 
 
         switch(state)
