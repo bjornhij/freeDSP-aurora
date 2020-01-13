@@ -53,11 +53,14 @@ INCLUDEPATH += src \
                ../SIGMASTUDIO/8channels \
                ../SIGMASTUDIO/8channelsUSB \
                ../SIGMASTUDIO/HomeCinema71 \
-               ../SIGMASTUDIO/HomeCinema71USB
+               ../SIGMASTUDIO/HomeCinema71USB \
+               ../SIGMASTUDIO/4FIRs \
+               src/dsp/custom
 
 SOURCES += \
         main.cpp \
         MainWindow.cpp \
+        src/DialogConnect.cpp \
         src/DialogReleaseNotes.cpp \
         src/QPreset.cpp \
         src/figure/ccolormap.cpp \
@@ -84,10 +87,15 @@ SOURCES += \
         src/dsp/8channelsUSB/PlugIn8ChannelsUSB.cpp \
         src/dsp/4FIRs/PlugIn4FIRs.cpp \
         src/dsp/HomeCinema71/PlugInHomeCinema71.cpp \
-        src/dsp/HomeCinema71USB/PlugInHomeCinema71USB.cpp 
+        src/dsp/HomeCinema71USB/PlugInHomeCinema71USB.cpp \
+        src/WizardConnect.cpp \
+        src/WizardImportRewFrq.cpp \
+        src/WizardImportRewPeq.cpp \
+        src/dsp/custom/PlugInCustom.cpp
 
 HEADERS += \
         MainWindow.hpp \
+        src/DialogConnect.h \
         src/DialogReleaseNotes.h \
         src/QPreset.h \
         src/figure/ccolormap.h \
@@ -130,11 +138,22 @@ HEADERS += \
         ../SIGMASTUDIO/HomeCinema71USB/HomeCinema71USB_IC_1.h \
         ../SIGMASTUDIO/HomeCinema71USB/HomeCinema71USB_IC_1_REG.h \
         ../SIGMASTUDIO/HomeCinema71USB/HomeCinema71USB_IC_1_PARAM.h \
+        ../SIGMASTUDIO/4FIRs/4FIRs_IC_1.h \
+        ../SIGMASTUDIO/4FIRs/4FIRs_IC_1_REG.h \
+        ../SIGMASTUDIO/4FIRs/4FIRs_IC_1_PARAM.h \
         src/LogFile.h \
-        src/QSleeper.hpp
+        src/QSleeper.hpp \
+        src/WizardConnect.hpp \
+        src/QMyDoubleSpinBox.hpp \
+        src/WizardImportRewFrq.hpp \
+        src/WizardImportRewPeq.hpp \
+        src/dsp/custom/PlugInCustom.hpp \
+        src/customdefines.hpp
+        
 
 FORMS += \
         MainWindow.ui \
+        src/DialogConnect.ui \
         src/DialogReleaseNotes.ui \
         src/QDspBlock.ui \
         src/QPeq.ui \
@@ -224,6 +243,11 @@ macx {
   APP_DSPPLUGIN_HOMECINEMA71_USB.path = Contents/Resources/homecinema71usb
   QMAKE_BUNDLE_DATA += APP_DSPPLUGIN_HOMECINEMA71_USB
 
+  # Copy 4FIRs plugin
+  APP_DSPPLUGIN_4FIRS.files = $${PWD}/../SIGMASTUDIO/4FIRs/TxBuffer_IC_1.dat $${PWD}/../SIGMASTUDIO/4FIRs/NumBytes_IC_1.dat
+  APP_DSPPLUGIN_4FIRS.path = Contents/Resources/4firs
+  QMAKE_BUNDLE_DATA += APP_DSPPLUGIN_4FIRS
+
   codesign.depends  += all
   codesign.commands += $$dirname(QMAKE_QMAKE)/macdeployqt $${TARGET}.app -appstore-compliant;
 
@@ -277,10 +301,13 @@ win32 {
 
   DEFINES += __WIN__
   DEFINES += MATLIB_USE_UINT64
-  DEFINES += __NOFFT__
+  DEFINES +=  USE_FFTS
   DEFINES += __NOSNDFILE__
 
   RC_ICONS = $${PWD}/rc/appicon.ico
+
+  INCLUDEPATH += win64/include
+  LIBS += -L$${PWD}/win64/libs -lffts_staticd
 
   # Copy dspplugins.json
   SOURCE_APP_DSPPLUGIN_JSON = $${PWD}/extras/dspplugins.json
@@ -349,6 +376,20 @@ win32 {
   QMAKE_POST_LINK +=$$quote(cmd /c copy /y $${SOURCE_APP_DSPPLUGIN_HOMECINEMA71_USB_TXBUFFER} $${TARGET_APP_DSPPLUGIN_HOMECINEMA71_USB_TXBUFFER}$$escape_expand(\n\t))
   QMAKE_POST_LINK +=$$quote(cmd /c copy /y $${SOURCE_APP_DSPPLUGIN_HOMECINEMA71_USB_NUMBYTES} $${TARGET_APP_DSPPLUGIN_HOMECINEMA71_USB_NUMBYTES}$$escape_expand(\n\t))
 
+  # Copy 4FIRs plugin
+  TARGET_DIR_4FIRS = $${OUT_PWD}/release/dspplugins/4firs
+  TARGET_DIR_4FIRS ~= s,/,\\,g
+  SOURCE_APP_DSPPLUGIN_4FIRS_TXBUFFER = $${PWD}/../SIGMASTUDIO/4FIRs/TxBuffer_IC_1.dat
+  SOURCE_APP_DSPPLUGIN_4FIRS_NUMBYTES = $${PWD}/../SIGMASTUDIO/4FIRs/NumBytes_IC_1.dat
+  TARGET_APP_DSPPLUGIN_4FIRS_TXBUFFER = $${OUT_PWD}/release/dspplugins/4firs/TxBuffer_IC_1.dat
+  TARGET_APP_DSPPLUGIN_4FIRS_NUMBYTES = $${OUT_PWD}/release/dspplugins/4firs/NumBytes_IC_1.dat
+  SOURCE_APP_DSPPLUGIN_4FIRS_TXBUFFER ~= s,/,\\,g
+  SOURCE_APP_DSPPLUGIN_4FIRS_NUMBYTES ~= s,/,\\,g
+  TARGET_APP_DSPPLUGIN_4FIRS_TXBUFFER ~= s,/,\\,g
+  TARGET_APP_DSPPLUGIN_4FIRS_NUMBYTES ~= s,/,\\,g
+  QMAKE_POST_LINK +=$$quote(cmd /c if not exist "$${TARGET_DIR_4FIRS}" mkdir $${TARGET_DIR_4FIRS} $$escape_expand(\n\t))
+  QMAKE_POST_LINK +=$$quote(cmd /c copy /y $${SOURCE_APP_DSPPLUGIN_4FIRS_TXBUFFER} $${TARGET_APP_DSPPLUGIN_4FIRS_TXBUFFER}$$escape_expand(\n\t))
+  QMAKE_POST_LINK +=$$quote(cmd /c copy /y $${SOURCE_APP_DSPPLUGIN_4FIRS_NUMBYTES} $${TARGET_APP_DSPPLUGIN_4FIRS_NUMBYTES}$$escape_expand(\n\t))
 
   product.depends += all
 
@@ -359,12 +400,12 @@ win32 {
   product.commands += $$quote( $$shell_quote($$shell_path($$dirname(QMAKE_QMAKE)/../../../Tools/QtCreator/bin/jom.exe)) -f Makefile.Release clean $$escape_expand(\n\t))
 
   product.commands += $$quote(cd release $$escape_expand(\n\t))
-  product.commands += $$quote( $$shell_quote($$shell_path($$dirname(QMAKE_QMAKE)/../../../Tools/QtInstallerFramework/3.1/bin/archivegen.exe)) auverdionControl.7z * $$escape_expand(\n\t))
+  product.commands += $$quote( $$shell_quote($$shell_path($$dirname(QMAKE_QMAKE)/../../../Tools/QtInstallerFramework/3.2/bin/archivegen.exe)) auverdionControl.7z * $$escape_expand(\n\t))
   product.commands += $$quote(cd.. $$escape_expand(\n\t))
 
   product.commands += $$quote(cmd /c move /y $$shell_quote($$shell_path($${OUT_PWD}/release/auverdionControl.7z)) $$shell_quote($$shell_path($${PWD}/installer/win64/packages/com.auverdion.auverdionControl/data/auverdionControl.7z))$$escape_expand(\n\t))
 
-  product.commands += $$quote( $$shell_quote($$shell_path($$dirname(QMAKE_QMAKE)/../../../Tools/QtInstallerFramework/3.1/bin/binarycreator.exe))  -c $$shell_quote($$shell_path($${PWD}/installer/win64/config/config.xml)) -p $$shell_quote($$shell_path($${PWD}/installer/win64/packages)) $$shell_quote($$shell_path($${PWD}/installer/win64/auverdionInstaller.exe)) $$escape_expand(\n\t))
+  product.commands += $$quote( $$shell_quote($$shell_path($$dirname(QMAKE_QMAKE)/../../../Tools/QtInstallerFramework/3.2/bin/binarycreator.exe))  -c $$shell_quote($$shell_path($${PWD}/installer/win64/config/config.xml)) -p $$shell_quote($$shell_path($${PWD}/installer/win64/packages)) $$shell_quote($$shell_path($${PWD}/installer/win64/auverdionInstaller.exe)) $$escape_expand(\n\t))
 
   QMAKE_EXTRA_TARGETS += product
 
