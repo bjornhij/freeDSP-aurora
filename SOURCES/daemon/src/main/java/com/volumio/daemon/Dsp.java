@@ -36,7 +36,7 @@ public class Dsp extends AbstractSpringSerialPortConnector {
 
         this.volume = volume;
 
-        double dsp_volume = Math.log(volume / 100.0) * 20;
+        double dsp_volume = Math.log(volume / 200.0) * 20;
 
         logger.info("Setting to " + dsp_volume + "db");
 
@@ -45,7 +45,7 @@ public class Dsp extends AbstractSpringSerialPortConnector {
         logger.info("Setting to " + dsp_volume + "??");
 
 
-        String data = this.makeParameter(0x4fb8, dsp_volume);
+        String data = this.makeParameter(0x4fb9, dsp_volume);
 
         logger.info("Calculated: " + data);
 
@@ -74,97 +74,187 @@ public class Dsp extends AbstractSpringSerialPortConnector {
     void setInput(String input) {
 
         this.input = input;
-        int oldvol = this.volume;
-        this.setVolume(0);
 
-        // delay
-        for(int i = 0; i < 4; i++)
-            this.sendData("D" + "000000000000");
+
+        this.sendData("I" + "200123");
+
 
         switch(input)
         {
             case "usb":
                 // channel 1
-                this.sendData("D" + "4fde00000000");
-                this.sendData("D" + "4fe900000001");
+                //
+                // I200123
+                // D4fe100000000
+                // D4fec00000001
+                // I200122
+                //
+                this.sendData("D" + "4fe100000000");
+                this.sendData("D" + "4fec00000001");
 
                 // channel 2
-                this.sendData("D" + "4fda00000001");
-                this.sendData("D" + "4fe800000001");
+                // I200123
+                // D4fdd00000001
+                // D4feb00000001
+                // I200122
+
+                this.sendData("D" + "4fdd00000001");
+                this.sendData("D" + "4feb00000001");
 
                 break;
             case "analog_1":
 
                 // channel 1
-                this.sendData("D" + "4fdd00000000");
-                this.sendData("D" + "4fe900000000");
+                // I200123
+                // D4fe000000000
+                // D4fec00000000
+                // I200122
+
+                this.sendData("D" + "4fe000000000");
+                this.sendData("D" + "4fec00000000");
 
                 // channel 2
-                this.sendData("D" + "4fdb00000001");
-                this.sendData("D" + "4fe800000000");
+                // channel 1
+                // I200123
+                // D4fde00000001
+                // D4feb00000000
+                // I200122
+
+                this.sendData("D" + "4fde00000001");
+                this.sendData("D" + "4feb00000000");
 
                 break;
             case "analog_2":
 
                 // channel 1
-                this.sendData("D" + "4fdd00000002");
-                this.sendData("D" + "4fe900000000");
+                // 4fe000000002
+                // 4fec00000000
+
+                this.sendData("D" + "4fe000000002");
+                this.sendData("D" + "4fec00000000");
 
                 // channel 2
-                this.sendData("D" + "4fdb00000003");
-                this.sendData("D" + "4fe800000000");
+                // 4fde00000003
+                // 4feb00000000
+
+                this.sendData("D" + "4fde00000003");
+                this.sendData("D" + "4feb00000000");
 
                 break;
             case "analog_3":
 
                 // channel 1
-                this.sendData("D" + "4fdd00000004");
-                this.sendData("D" + "4fe900000000");
+                // 4fe000000004
+                // 4fec00000000
+
+                this.sendData("D" + "4fe000000004");
+                this.sendData("D" + "4fec00000000");
 
                 // channel 2
-                this.sendData("D" + "4fdb00000005");
-                this.sendData("D" + "4fe800000000");
+                // 4fde00000005
+                // 4feb00000000
+
+                this.sendData("D" + "4fde00000005");
+                this.sendData("D" + "4feb00000000");
 
                 break;
             case "analog_4":
 
                 // channel 1
-                this.sendData("D" + "4fdd00000006");
-                this.sendData("D" + "4fe900000000");
+                // 4fe000000006
+                // 4fec00000000
+
+                this.sendData("D" + "4fe000000006");
+                this.sendData("D" + "4fec00000000");
 
                 // channel 2
-                this.sendData("D" + "4fdb00000007");
-                this.sendData("D" + "4fe800000000");
+                // 4fde00000007
+                // 4feb00000000
+
+                this.sendData("D" + "4fde00000007");
+                this.sendData("D" + "4feb00000000");
 
                 break;
             case "optical_1":
 
+                this.sendData("I" + "820100");
+
                 // channel 1
-                this.sendData("D" + "4fe100000000");
-                this.sendData("D" + "4fe900000004");
+                // 4fe400000000
+                // 4fec00000004
+
+                this.sendData("D" + "4fe400000000");
+                this.sendData("D" + "4fec00000004");
 
                 // channel 2
-                this.sendData("D" + "4fd900000001");
-                this.sendData("D" + "4fe800000004");
+                // 4fdc00000001
+                // 4feb00000004
+
+                this.sendData("D" + "4fdc00000001");
+                this.sendData("D" + "4feb00000004");
 
                 break;
             case "optical_2":
 
+                this.sendData("I" + "820101");
+
+                // channel 1
+                // 4fe400000000
+                // 4fec00000004
+
+                this.sendData("D" + "4fe400000000");
+                this.sendData("D" + "4fec00000004");
+
+                // channel 2
+                // 4fdc00000001
+                // 4feb00000004
+
+                this.sendData("D" + "4fdc00000001");
+                this.sendData("D" + "4feb00000004");
+
                 break;
             case "optical_3":
 
+                this.sendData("I" + "820102");
+
+                // channel 1
+                // 4fe400000000
+                // 4fec00000004
+
+                this.sendData("D" + "4fe400000000");
+                this.sendData("D" + "4fec00000004");
+
+                // channel 2
+                // 4fdc00000001
+                // 4feb00000004
+
+                this.sendData("D" + "4fdc00000001");
+                this.sendData("D" + "4feb00000004");
+
                 break;
             case "optical_4":
+
+                this.sendData("I" + "820103");
+
+                // channel 1
+                // 4fe400000000
+                // 4fec00000004
+
+                this.sendData("D" + "4fe400000000");
+                this.sendData("D" + "4fec00000004");
+
+                // channel 2
+                // 4fdc00000001
+                // 4feb00000004
+
+                this.sendData("D" + "4fdc00000001");
+                this.sendData("D" + "4feb00000004");
 
                 break;
 
         }
 
-        // delay
-        for(int i = 0; i < 4; i++)
-            this.sendData("D" + "000000000000");
-
-        this.setVolume(oldvol);
+        this.sendData("I" + "200122");
     }
 
     String makeParameter(Integer reg, double val)
