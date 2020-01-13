@@ -2316,6 +2316,25 @@ void loop()
         Serial.print("Sending to I2C: ");
         Serial.println(currentSerialLine);
         Serial.println(currentSerialLine.length());
+
+        int offset = 0;
+        String str = currentSerialLine.substring( offset, offset + 2 );
+        uint8_t addr = (uint8_t)strtoul( str.c_str(), NULL, 16 );
+        offset += 2;
+        str = currentSerialLine.substring( offset, offset + 2 );
+        byte regaddr = (byte)strtoul( str.c_str(), NULL, 16 );
+        offset += 2;
+        str = currentSerialLine.substring( offset, offset + 2 );
+        byte data = (byte)strtoul( str.c_str(), NULL, 16 );
+        offset += 2;
+        
+        Wire.beginTransmission( addr>>1 );
+        Wire.write( regaddr );
+        Wire.write( data );
+        Wire.endTransmission( true );
+
+        Serial.println("Sent");
+        
         currentSerialLine = "";
       }
       else
