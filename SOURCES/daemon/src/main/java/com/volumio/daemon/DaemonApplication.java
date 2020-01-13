@@ -18,6 +18,9 @@ public class DaemonApplication {
     @Autowired
     Input input;
 
+    @Autowired
+    LircClient lircClient;
+
     public static void main(String[] args) {
 
         SpringApplication.run(DaemonApplication.class, args);
@@ -31,6 +34,14 @@ public class DaemonApplication {
         logger.info("Initialized");
         volume.setVolume(10);
         input.setInput("usb");
+        lircClient.openConnection();
+        try {
+            lircClient.sendMessage("help");
+        }
+        catch(InterruptedException e)
+        {
+            e.printStackTrace();
+        }
     }
 
 }
