@@ -35,13 +35,6 @@ public class DaemonApplication {
         volume.setVolume(10);
         input.setInput("usb");
         lircClient.openConnection();
-        try {
-            lircClient.sendMessage("help");
-        }
-        catch(InterruptedException e)
-        {
-            e.printStackTrace();
-        }
     }
 
 }
