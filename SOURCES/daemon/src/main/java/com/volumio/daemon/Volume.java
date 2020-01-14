@@ -17,6 +17,9 @@ public class Volume {
     @Autowired
     Volumio volumio;
 
+    @Autowired
+    LircClient lircClient;
+
     public int getVolume() {
         return dsp.getVolume();
     }
@@ -24,6 +27,14 @@ public class Volume {
     public void setVolume(int volume) {
         logger.info("Current volume is " + this.volume);
         logger.info("Setting to " + volume + " linear");
+
+        try {
+            lircClient.sendMessage("help");
+        }
+        catch(InterruptedException e)
+        {
+            e.printStackTrace();
+        }
 
         if(volume != this.volume) {
             dsp.setVolume(volume);
