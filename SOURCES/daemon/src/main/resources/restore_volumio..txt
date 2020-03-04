@@ -54,18 +54,18 @@ sudo dpkg -i wiringpi-2.46-1.deb
 
 apt-get install lirc
 
-lircd -l -n
-
 cat >> /boot/config.txt <<EOF
 dtoverlay=gpio-ir,gpio_pin=23
 EOF
 
-sudo /etc/init.d/lirc stop
-sudo /etc/init.d/lirc start
+# cat lirc_options.conf
+[lircd]
+nodaemon        = False
+driver          = default
+device          = /dev/lirc0
+listen          = 0.0.0.0:8765
 
-update-rc.d lirc defaults
+/etc/rc.local
 
- cat lircd.conf
-driver    = default
-device    = /dev/lirc0
+/usr/sbin/lircd -l
 
