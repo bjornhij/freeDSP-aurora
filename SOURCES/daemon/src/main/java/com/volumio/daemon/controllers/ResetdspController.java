@@ -2,6 +2,7 @@ package com.volumio.daemon.controllers;
 
 
 import com.volumio.daemon.Dsp;
+import com.volumio.daemon.Hypex;
 import com.volumio.daemon.Volume;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,10 +20,12 @@ public class ResetdspController {
 
     @Autowired
     Dsp dsp;
+    Hypex hypex;
 
     @GetMapping("/resetdsp")
     @ResponseBody
     public String resetDsp() {
+        hypex.setState("off");
         dsp.reset();
         return "OK";
     }

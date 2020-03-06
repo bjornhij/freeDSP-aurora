@@ -47,9 +47,17 @@ volumio vrestart
 
 curl -sSL https://pi4j.com/install | sudo bash
 
+
+#cd /tmp
+#wget https://project-downloads.drogon.net/wiringpi-latest.deb
+#sudo dpkg -i wiringpi-latest.deb
+
 cd /tmp
 wget https://unicorn.drogon.net/wiringpi-2.46-1.deb
 sudo dpkg -i wiringpi-2.46-1.deb
+
+
+wget https://github.com/WiringPi/WiringPi/archive/master.zip
 
 
 apt-get install lirc

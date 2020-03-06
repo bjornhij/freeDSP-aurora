@@ -29,7 +29,7 @@ public class Hypex {
         return state;
     }
 
-    void setState(String state) {
+    public void setState(String state) {
 
         logger.info("Set state to " + state);
 
