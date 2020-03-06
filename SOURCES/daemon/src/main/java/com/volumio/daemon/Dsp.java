@@ -36,29 +36,26 @@ public class Dsp extends AbstractSpringSerialPortConnector {
 
         this.volume = volume;
 
-        double dsp_volume = Math.log(volume / 200.0) * 20;
+        double dsp_volume = Math.log(volume) * 20;
 
         logger.info("Setting to " + dsp_volume + "db");
 
-        dsp_volume = Math.pow(10.0, dsp_volume/20.0);
-
-        logger.info("Setting to " + dsp_volume + "??");
-
-
-        String data = this.makeParameter(0x4fb9, dsp_volume);
-
-        logger.info("Calculated: " + data);
-
-        this.sendData("D" + data);
+        this.sendData("/mvol", Double.toString((int)(dsp_volume-80)));
     }
 
-    void sendData(String data)
+    public void reset()
     {
-        logger.info("Sending: " + data);
+        this.sendData("/reset", "true");
+    }
 
+    void sendData(String handler, String data)
+    {
+        String message = handler + "|" + data;
+
+        logger.info("Sending: " + message);
 
         try {
-            this.sendMessage(data);
+            this.sendMessage(message);
             this.sendMessage("\n");
         }
         catch (IOException e)
@@ -75,186 +72,110 @@ public class Dsp extends AbstractSpringSerialPortConnector {
 
         this.input = input;
 
-
-        this.sendData("I" + "200123");
-
-
         switch(input)
         {
             case "usb":
-                // channel 1
-                //
-                // I200123
-                // D4fe100000000
-                // D4fec00000001
-                // I200122
-                //
-                this.sendData("D" + "4fe100000000");
-                this.sendData("D" + "4fec00000001");
 
-                // channel 2
-                // I200123
-                // D4fdd00000001
-                // D4feb00000001
-                // I200122
+                // input
+                // {"idx":0,"sel":"0x00010000"}
+                // {"idx":1,"sel":"0x00010001"}
 
-                this.sendData("D" + "4fdd00000001");
-                this.sendData("D" + "4feb00000001");
+                this.sendData("/input", "idx|0|sel|0x00010000");
+                this.sendData("/input", "idx|1|sel|0x00010001");
+
 
                 break;
             case "analog_1":
 
-                // channel 1
-                // I200123
-                // D4fe000000000
-                // D4fec00000000
-                // I200122
+                // input
+                // {"idx":0,"sel":"0x00000000"}
+                // {"idx":1,"sel":"0x00000001"}
 
-                this.sendData("D" + "4fe000000000");
-                this.sendData("D" + "4fec00000000");
-
-                // channel 2
-                // channel 1
-                // I200123
-                // D4fde00000001
-                // D4feb00000000
-                // I200122
-
-                this.sendData("D" + "4fde00000001");
-                this.sendData("D" + "4feb00000000");
+                this.sendData("/input", "idx|0|sel|0x00000000");
+                this.sendData("/input", "idx|1|sel|0x00000001");
 
                 break;
             case "analog_2":
 
-                // channel 1
-                // 4fe000000002
-                // 4fec00000000
+                // input
+                // {"idx":0,"sel":"0x00000002"}
+                // {"idx":1,"sel":"0x00000003"}
 
-                this.sendData("D" + "4fe000000002");
-                this.sendData("D" + "4fec00000000");
-
-                // channel 2
-                // 4fde00000003
-                // 4feb00000000
-
-                this.sendData("D" + "4fde00000003");
-                this.sendData("D" + "4feb00000000");
+                this.sendData("/input", "idx|0|sel|0x00000002");
+                this.sendData("/input", "idx|1|sel|0x00000003");
 
                 break;
             case "analog_3":
 
-                // channel 1
-                // 4fe000000004
-                // 4fec00000000
+                // input
+                // {"idx":0,"sel":"0x00000004"}
+                // {"idx":1,"sel":"0x00000005"}
 
-                this.sendData("D" + "4fe000000004");
-                this.sendData("D" + "4fec00000000");
-
-                // channel 2
-                // 4fde00000005
-                // 4feb00000000
-
-                this.sendData("D" + "4fde00000005");
-                this.sendData("D" + "4feb00000000");
+                this.sendData("/input", "idx|0|sel|0x00000004");
+                this.sendData("/input", "idx|1|sel|0x00000005");
 
                 break;
             case "analog_4":
 
-                // channel 1
-                // 4fe000000006
-                // 4fec00000000
+                // input
+                // {"idx":0,"sel":"0x00000006"}
+                // {"idx":1,"sel":"0x00000007"}
 
-                this.sendData("D" + "4fe000000006");
-                this.sendData("D" + "4fec00000000");
-
-                // channel 2
-                // 4fde00000007
-                // 4feb00000000
-
-                this.sendData("D" + "4fde00000007");
-                this.sendData("D" + "4feb00000000");
+                this.sendData("/input", "idx|0|sel|0x00000006");
+                this.sendData("/input", "idx|1|sel|0x00000007");
 
                 break;
             case "optical_1":
 
-                this.sendData("I" + "820100");
+                // addoncfg
+                // {"len":3,"i2c":["0x82","0x01","0x00"]}
+                // input
+                // {"idx":0,"sel":"0x00040000"}
+                // {"idx":1,"sel":"0x00040001"}
 
-                // channel 1
-                // 4fe400000000
-                // 4fec00000004
-
-                this.sendData("D" + "4fe400000000");
-                this.sendData("D" + "4fec00000004");
-
-                // channel 2
-                // 4fdc00000001
-                // 4feb00000004
-
-                this.sendData("D" + "4fdc00000001");
-                this.sendData("D" + "4feb00000004");
+                this.sendData("/input", "idx|0|sel|0x00040000");
+                this.sendData("/input", "idx|1|sel|0x00040001");
 
                 break;
             case "optical_2":
 
-                this.sendData("I" + "820101");
+                // addoncfg
+                // {"len":3,"i2c":["0x82","0x01","0x01"]}
+                // input
+                // {"idx":0,"sel":"0x00040000"}
+                // {"idx":1,"sel":"0x00040001"}
 
-                // channel 1
-                // 4fe400000000
-                // 4fec00000004
-
-                this.sendData("D" + "4fe400000000");
-                this.sendData("D" + "4fec00000004");
-
-                // channel 2
-                // 4fdc00000001
-                // 4feb00000004
-
-                this.sendData("D" + "4fdc00000001");
-                this.sendData("D" + "4feb00000004");
+                this.sendData("/input", "idx|0|sel|0x00040000");
+                this.sendData("/input", "idx|1|sel|0x00040001");
 
                 break;
             case "optical_3":
 
-                this.sendData("I" + "820102");
+                // addoncfg
+                // {"len":3,"i2c":["0x82","0x01","0x02"]}
+                // input
+                // {"idx":0,"sel":"0x00040000"}
+                // {"idx":1,"sel":"0x00040001"}
 
-                // channel 1
-                // 4fe400000000
-                // 4fec00000004
-
-                this.sendData("D" + "4fe400000000");
-                this.sendData("D" + "4fec00000004");
-
-                // channel 2
-                // 4fdc00000001
-                // 4feb00000004
-
-                this.sendData("D" + "4fdc00000001");
-                this.sendData("D" + "4feb00000004");
+                this.sendData("/input", "idx|0|sel|0x00040000");
+                this.sendData("/input", "idx|1|sel|0x00040001");
 
                 break;
             case "optical_4":
 
-                this.sendData("I" + "820103");
+                // addoncfg
+                // {"len":3,"i2c":["0x82","0x01","0x03"]}
+                // input
+                // {"idx":0,"sel":"0x00040000"}
+                // {"idx":1,"sel":"0x00040001"}
 
-                // channel 1
-                // 4fe400000000
-                // 4fec00000004
-
-                this.sendData("D" + "4fe400000000");
-                this.sendData("D" + "4fec00000004");
-
-                // channel 2
-                // 4fdc00000001
-                // 4feb00000004
-
-                this.sendData("D" + "4fdc00000001");
-                this.sendData("D" + "4feb00000004");
+                this.sendData("/input", "idx|0|sel|0x00040000");
+                this.sendData("/input", "idx|1|sel|0x00040001");
 
                 break;
 
         }
 
-        this.sendData("I" + "200122");
     }
 
     String makeParameter(Integer reg, double val)

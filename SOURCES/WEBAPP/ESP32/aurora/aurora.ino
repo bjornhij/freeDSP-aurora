@@ -4043,13 +4043,85 @@ void setup()
   Serial.println( "Ready" );
 }
 
+
+String getValue(String data, char separator, int index)
+{
+    int found = 0;
+    int strIndex[] = { 0, -1 };
+    int maxIndex = data.length() - 1;
+
+    for (int i = 0; i <= maxIndex && found <= index; i++) {
+        if (data.charAt(i) == separator || i == maxIndex) {
+            found++;
+            strIndex[0] = strIndex[1] + 1;
+            strIndex[1] = (i == maxIndex) ? i+1 : i;
+        }
+    }
+    return found > index ? data.substring(strIndex[0], strIndex[1]) : "";
+}
+
 //==============================================================================
 /*! Arduino Main Loop
  *
  */ 
 void loop()
 {
+  static String currentSerialLine = "";
+
   TIMERG0.wdt_wprotect=TIMG_WDT_WKEY_VALUE;
   TIMERG0.wdt_feed=1;
   TIMERG0.wdt_wprotect=0;
+
+  if (Serial.available() > 0) {
+
+    char input = Serial.read();
+
+    if(input != '\r' && input != '\n')
+    {
+      currentSerialLine += input;
+    }
+    if(input == '\n')
+    {
+      Serial.println(currentSerialLine);
+      
+      String handler = getValue(currentSerialLine, '|', 0);
+      String data = getValue(currentSerialLine, '|', 1);
+
+      if(handler == "/mvol")
+      {
+        Serial.println("Setting volume to " + data);
+        masterVolume.val = data.toFloat();  
+        setMasterVolume();
+      }
+
+      if(handler == "/input")
+      {
+        Serial.println("Setting input to " + data);
+
+        String idx_param = getValue(currentSerialLine, '|', 2);
+        String sel = getValue(currentSerialLine, '|', 4);
+
+        Serial.println("idx: " + idx_param);
+        Serial.println("sel: " + sel);
+
+        softMuteDAC();
+        delay(500);
+
+        int idx = idx_param.toInt();
+
+        paramInputs[idx].sel = (uint32_t)strtoul( sel.c_str(), NULL, 16 );
+      
+        setInput( idx );
+                   
+        softUnmuteDAC();
+      }
+
+      if(handler == "/reset")
+      {
+        ESP.restart();
+      }
+
+      currentSerialLine = "";
+    }
+  }
 }
