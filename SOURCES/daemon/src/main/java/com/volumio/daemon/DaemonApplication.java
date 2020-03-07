@@ -32,7 +32,7 @@ public class DaemonApplication {
     @EventListener
     public void onApplicationEvent(ContextRefreshedEvent event) {
         logger.info("Initialized");
-        volume.setVolume(10);
+        volume.setVolume(5);
         input.setInput("usb");
         lircClient.openConnection();
     }
