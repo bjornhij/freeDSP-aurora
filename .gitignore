@@ -1,3 +1,6 @@
+<<<<<<< HEAD
+**/.DS_Store
+=======
 .DS_Store
 SOURCES/.vscode
 kickstarter
@@ -9,4 +12,4 @@ SOURCES/build-auverdionControl-Desktop_Qt_5_12_5_clang_64bit-Debug
 SOURCES/build-auverdionControl-Desktop_Qt_5_12_5_clang_64bit-Release
 *.pro.user.*
 ADDONS/AddOnL mit SPDIF
-**/.DS_Store
+>>>>>>> 2a467bbd23b4d7b7b025619a85d47754eb2e76ac
