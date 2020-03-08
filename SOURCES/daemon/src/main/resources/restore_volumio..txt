@@ -48,32 +48,22 @@ volumio vrestart
 curl -sSL https://pi4j.com/install | sudo bash
 
 
-#cd /tmp
-#wget https://project-downloads.drogon.net/wiringpi-latest.deb
-#sudo dpkg -i wiringpi-latest.deb
-
-cd /tmp
-wget https://unicorn.drogon.net/wiringpi-2.46-1.deb
-sudo dpkg -i wiringpi-2.46-1.deb
-
-
 wget https://github.com/WiringPi/WiringPi/archive/master.zip
 
-
-apt-get install lirc
 
 cat >> /boot/config.txt <<EOF
 dtoverlay=gpio-ir,gpio_pin=23
 EOF
 
-# cat lirc_options.conf
-[lircd]
-nodaemon        = False
-driver          = default
-device          = /dev/lirc0
-listen          = 0.0.0.0:8765
 
-/etc/rc.local
+/etc/rc_keymaps
 
-/usr/sbin/lircd -l
+0xa50a	KEY_VOLUMEUP
+0xa50b	KEY_VOLUMEDOWN
+0xa51c	KEY_POWER
+
+Device	/dev/input/event2
+Driver	gpio_ir_recv
+Table	rc-rc6-mce
+
 

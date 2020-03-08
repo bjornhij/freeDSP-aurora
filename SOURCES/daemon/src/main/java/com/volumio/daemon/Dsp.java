@@ -130,6 +130,8 @@ public class Dsp extends AbstractSpringSerialPortConnector {
 
                 // addoncfg
                 // {"len":3,"i2c":["0x82","0x01","0x00"]}
+                this.sendData("/addoncfg", "0x82|0x01|0x00");
+
                 // input
                 // {"idx":0,"sel":"0x00040000"}
                 // {"idx":1,"sel":"0x00040001"}
@@ -142,6 +144,8 @@ public class Dsp extends AbstractSpringSerialPortConnector {
 
                 // addoncfg
                 // {"len":3,"i2c":["0x82","0x01","0x01"]}
+                this.sendData("/addoncfg", "0x82|0x01|0x01");
+
                 // input
                 // {"idx":0,"sel":"0x00040000"}
                 // {"idx":1,"sel":"0x00040001"}
@@ -154,6 +158,9 @@ public class Dsp extends AbstractSpringSerialPortConnector {
 
                 // addoncfg
                 // {"len":3,"i2c":["0x82","0x01","0x02"]}
+                this.sendData("/addoncfg", "0x82|0x01|0x02");
+
+
                 // input
                 // {"idx":0,"sel":"0x00040000"}
                 // {"idx":1,"sel":"0x00040001"}
@@ -166,6 +173,8 @@ public class Dsp extends AbstractSpringSerialPortConnector {
 
                 // addoncfg
                 // {"len":3,"i2c":["0x82","0x01","0x03"]}
+                this.sendData("/addoncfg", "0x82|0x01|0x03");
+
                 // input
                 // {"idx":0,"sel":"0x00040000"}
                 // {"idx":1,"sel":"0x00040001"}
