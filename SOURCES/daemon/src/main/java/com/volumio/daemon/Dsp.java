@@ -36,7 +36,8 @@ public class Dsp extends AbstractSpringSerialPortConnector {
 
         this.volume = volume;
 
-        double dsp_volume = Math.log(volume/100.0) * 20;
+        //double dsp_volume = Math.log10(volume/100.0) * 20.0;
+        double dsp_volume = -80 + (volume * 0.8);
 
         logger.info("Setting to " + dsp_volume + "db");
 

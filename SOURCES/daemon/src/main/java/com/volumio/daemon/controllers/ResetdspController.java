@@ -20,6 +20,7 @@ public class ResetdspController {
 
     @Autowired
     Dsp dsp;
+    @Autowired
     Hypex hypex;
 
     @GetMapping("/resetdsp")
