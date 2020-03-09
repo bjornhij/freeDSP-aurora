@@ -4120,6 +4120,32 @@ void loop()
         softUnmuteDAC();
       }
 
+      if(handler == "/addoncfg")
+      {
+        Serial.println("Configuring addon " + data);
+      
+        softMuteDAC();
+        delay(500);
+      
+        if( Settings.addonid == ADDON_B )
+        {
+          String i2c1 = getValue(currentSerialLine, '|', 1);
+          String i2c2 = getValue(currentSerialLine, '|', 2);
+          String i2c3 = getValue(currentSerialLine, '|', 3);
+          
+          currentAddOnCfg[0] = (uint8_t)strtoul( i2c1.c_str(), NULL, 16 );
+          currentAddOnCfg[1] = (uint8_t)strtoul( i2c2.c_str(), NULL, 16 );
+          currentAddOnCfg[2] = (uint8_t)strtoul( i2c3.c_str(), NULL, 16 );
+      
+          Wire.beginTransmission( currentAddOnCfg[0]>>1 ); //ADDONB_SPDIFMUX_ADDR
+          Wire.write( currentAddOnCfg[1] ); // regaddr
+          Wire.write( currentAddOnCfg[2] ); // data
+          Wire.endTransmission( true );
+        }
+            
+        softUnmuteDAC();
+      }
+
       if(handler == "/reset")
       {
         ESP.restart();

@@ -56,14 +56,29 @@ dtoverlay=gpio-ir,gpio_pin=23
 EOF
 
 
-/etc/rc_keymaps
+/etc/rc_keymaps/pioneer
+# table pioneer, type: NEC
+0xa50a    KEY_FN_F1 # volup
+0xa50b    KEY_FN_F2 # voldown
+0xa51c    KEY_FN_F3 # power
 
-0xa50a	KEY_VOLUMEUP
-0xa50b	KEY_VOLUMEDOWN
-0xa51c	KEY_POWER
 
-Device	/dev/input/event2
-Driver	gpio_ir_recv
-Table	rc-rc6-mce
+/etc/rc_maps.cfg
+
+*	*	pioneer
+
+rest uitcommenten
+
+https://python-evdev.readthedocs.io/en/latest/install.html
+
+
+sudo apt-get install python-pip
+
+sudo pip install evdev
+
+sudo apt-get install python-dev
+
+/usr/bin/xset -display :0 dpms force on
+/usr/bin/xset -display :0 dpms force off
 
 
