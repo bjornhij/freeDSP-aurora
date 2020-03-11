@@ -61,6 +61,16 @@ EOF
 0xa50a    KEY_FN_F1 # volup
 0xa50b    KEY_FN_F2 # voldown
 0xa51c    KEY_FN_F3 # power
+0xa51a    KEY_FN_F4 # aan
+0xa51b    KEY_FN_F5 # uit
+0xa54c    KEY_FN_F6 # cd ----> AUDO
+0xa585    KEY_FN_F7 # dvd ---> TV
+0xa589    KEY_FN_F8 # dvr/bd
+0xa50c    KEY_FN_F9 # tv/sat
+0xa588    KEY_FN_F10 # cd-r
+0xa516    KEY_FN_F11 # video1
+0xa517    KEY_FN_F12 # video2
+0xa547    KEY_FN_ESC # tuner
 
 
 /etc/rc_maps.cfg
@@ -80,5 +90,7 @@ sudo apt-get install python-dev
 
 /usr/bin/xset -display :0 dpms force on
 /usr/bin/xset -display :0 dpms force off
+
+cp /home/volumio/.Xauthority /root/
 
 

@@ -18,6 +18,11 @@ public class Hypex {
     @Autowired
     private Environment env;
 
+    @Autowired
+    Volume volume;
+
+    @Autowired
+    Screen screen;
 
     @Value("off")
     private String state;
@@ -44,15 +49,14 @@ public class Hypex {
         switch(state)
         {
             case "on":
-
+                volume.setVolume(2);
+                screen.setOn();
                 this.gpiopin.low();
-
                 break;
 
             case "off":
-
+                screen.setOff();
                 this.gpiopin.high();
-
                 break;
         }
     }
