@@ -29,19 +29,21 @@ public class Dsp extends AbstractSpringSerialPortConnector {
 
     void setVolume(int volume) {
 
-        logger.info("Set volume to " + volume);
+        if(volume > 0) {
+            logger.info("Set volume to " + volume);
 
-        // http://www.playdotsound.com/portfolio-item/decibel-db-to-float-value-calculator-making-sense-of-linear-values-in-audio-tools/
-        // linear-to-db(x) = log(x) * 20
+            // http://www.playdotsound.com/portfolio-item/decibel-db-to-float-value-calculator-making-sense-of-linear-values-in-audio-tools/
+            // linear-to-db(x) = log(x) * 20
 
-        this.volume = volume;
+            this.volume = volume;
 
-        double dsp_volume = Math.log10(volume/100.0) * 40.0;
-        //double dsp_volume = -80 + (volume * 0.8);
+            double dsp_volume = Math.log10(volume / 100.0) * 40.0;
+            //double dsp_volume = -80 + (volume * 0.8);
 
-        logger.info("Setting to " + dsp_volume + "db");
+            logger.info("Setting to " + dsp_volume + "db");
 
-        this.sendData("/mvol", Double.toString((int)(dsp_volume)));
+            this.sendData("/mvol", Double.toString((int) (dsp_volume)));
+        }
     }
 
     public void reset()
