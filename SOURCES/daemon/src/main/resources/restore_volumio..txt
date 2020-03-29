@@ -51,7 +51,8 @@ curl -sSL https://pi4j.com/install | sudo bash
 wget https://github.com/WiringPi/WiringPi/archive/master.zip
 
 
-cat >> /boot/config.txt <<EOF
+cat >> /boot/userconfig.txt <<EOF
+
 dtoverlay=gpio-ir,gpio_pin=23
 EOF
 
