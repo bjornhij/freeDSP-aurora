@@ -49,7 +49,7 @@ public class Hypex {
         switch(state)
         {
             case "on":
-                volume.setVolume(6);
+                volume.setVolume(9);
                 screen.setOn();
                 this.gpiopin.low();
                 break;

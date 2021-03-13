@@ -36,7 +36,7 @@ public class DaemonApplication {
     public void onApplicationEvent(ContextRefreshedEvent event) {
         logger.info("Initialized");
         hypex.setState("off");
-        volume.setVolume(6);
+        volume.setVolume(9);
         input.setInput("usb");
     }
 
