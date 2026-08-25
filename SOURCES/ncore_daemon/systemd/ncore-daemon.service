@@ -1,0 +1,18 @@
+[Unit]
+Description=Ncore / aurora control daemon
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=volumio
+Group=volumio
+SupplementaryGroups=gpio dialout input video
+WorkingDirectory=/home/volumio/ncore_daemon
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/home/volumio/ncore_daemon/.venv/bin/python -m ncore_daemon --config /home/volumio/ncore_daemon/config.yaml
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

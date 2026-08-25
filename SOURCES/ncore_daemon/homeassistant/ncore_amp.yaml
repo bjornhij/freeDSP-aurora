@@ -1,0 +1,129 @@
+# Copy into configuration.yaml (adjust host if needed).
+# After adding: restart Home Assistant, then create a webhook automation
+# OR include the automation block below.
+#
+# Daemon webhook URL:
+#   http://<homeassistant>:8123/api/webhook/ncore_updated
+# Set that as ha_webhook_url on the Pi.
+
+rest:
+  - resource: http://hypex-amp.local:9090/status
+    scan_interval: 30
+    sensor:
+      - name: Ncore Status
+        unique_id: ncore_status
+        value_template: "{{ value_json.state }}"
+        json_attributes:
+          - volume
+          - volume_level
+          - source
+          - source_list
+          - serial_ok
+          - gpio_ok
+          - ir_ok
+          - max_volume
+        availability: "{{ value_json.serial_ok and value_json.gpio_ok }}"
+
+rest_command:
+  ncore_power_on:
+    url: http://hypex-amp.local:9090/state/on
+    method: PUT
+  ncore_power_off:
+    url: http://hypex-amp.local:9090/state/off
+    method: PUT
+  ncore_volume_up:
+    url: http://hypex-amp.local:9090/volume/up
+    method: PUT
+  ncore_volume_down:
+    url: http://hypex-amp.local:9090/volume/down
+    method: PUT
+  ncore_volume_set:
+    url: >-
+      http://hypex-amp.local:9090/volume/{{ (volume_level *
+      (state_attr('sensor.ncore_status', 'max_volume') | default(80))) | round(0) | int }}
+    method: PUT
+  ncore_select_source:
+    url: http://hypex-amp.local:9090/input/{{ source }}
+    method: PUT
+
+script:
+  ncore_turn_on:
+    sequence:
+      - action: rest_command.ncore_power_on
+      - action: homeassistant.update_entity
+        target:
+          entity_id: sensor.ncore_status
+  ncore_turn_off:
+    sequence:
+      - action: rest_command.ncore_power_off
+      - action: homeassistant.update_entity
+        target:
+          entity_id: sensor.ncore_status
+  ncore_volume_up:
+    sequence:
+      - action: rest_command.ncore_volume_up
+      - action: homeassistant.update_entity
+        target:
+          entity_id: sensor.ncore_status
+  ncore_volume_down:
+    sequence:
+      - action: rest_command.ncore_volume_down
+      - action: homeassistant.update_entity
+        target:
+          entity_id: sensor.ncore_status
+  ncore_volume_set:
+    sequence:
+      - action: rest_command.ncore_volume_set
+        data:
+          volume_level: "{{ volume_level }}"
+      - action: homeassistant.update_entity
+        target:
+          entity_id: sensor.ncore_status
+  ncore_select_source:
+    sequence:
+      - action: rest_command.ncore_select_source
+        data:
+          source: "{{ source }}"
+      - action: homeassistant.update_entity
+        target:
+          entity_id: sensor.ncore_status
+
+media_player:
+  - platform: universal
+    name: Ncore Amp
+    device_class: receiver
+    commands:
+      turn_on:
+        action: script.ncore_turn_on
+      turn_off:
+        action: script.ncore_turn_off
+      volume_up:
+        action: script.ncore_volume_up
+      volume_down:
+        action: script.ncore_volume_down
+      volume_set:
+        action: script.ncore_volume_set
+        data:
+          volume_level: "{{ volume_level }}"
+      select_source:
+        action: script.ncore_select_source
+        data:
+          source: "{{ source }}"
+    attributes:
+      state: sensor.ncore_status
+      volume_level: sensor.ncore_status|volume_level
+      source: sensor.ncore_status|source
+      source_list: sensor.ncore_status|source_list
+
+automation:
+  - alias: Ncore status refresh
+    trigger:
+      - platform: webhook
+        webhook_id: ncore_updated
+        allowed_methods:
+          - POST
+        local_only: true
+    action:
+      - action: homeassistant.update_entity
+        target:
+          entity_id: sensor.ncore_status

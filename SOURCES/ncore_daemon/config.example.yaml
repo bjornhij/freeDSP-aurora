@@ -1,0 +1,31 @@
+# Copy to config.yaml or set NCORE_* environment variables.
+host: "0.0.0.0"
+port: 9090
+dry_run: false
+
+serial_port: "/dev/ttyUSB0"
+serial_baud: 115200
+
+# Pi4J WiringPi GPIO_09 = BCM 3 (I2C SCL). Confirm on the Pi before use.
+gpio_bcm_pin: 3
+
+backlight_path: "/sys/class/backlight/rpi_backlight/brightness"
+backlight_max: 80
+
+# Match a substring of `python3 -c "from evdev import list_devices, InputDevice; ..."`
+ir_device_name: ""
+ir_device_path: "/dev/input/event2"
+ir_repeat_delay_ms: 500
+ir_repeat_period_ms: 150
+
+# Home Assistant: Settings → Automations → webhook ncore_updated
+# Example: http://homeassistant.local:8123/api/webhook/ncore_updated
+ha_webhook_url: ""
+
+state_path: "state.json"
+
+max_volume: 80
+power_on_volume: 9
+power_on_restore_cap: 20
+volume_step_interval_ms: 150
+power_on_settle_ms: 50
