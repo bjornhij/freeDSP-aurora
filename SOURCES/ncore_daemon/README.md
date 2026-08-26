@@ -94,6 +94,29 @@ curl -s http://127.0.0.1:9090/status
 
 Kopieer `homeassistant/ncore_amp.yaml` naar `configuration.yaml`. Webhook-id: `ncore_updated`. Entiteit: `media_player.ncore_amp` (aan/uit, volume, bron — geen muziekstreaming).
 
+### Kiosk-login (eenmaal, of nooit)
+
+Chromium bewaart de sessie in `~/.config/chromium`. Eerste keer: aparte HA-user `kiosk` (geen admin), inloggen, **Keep me logged in**.
+
+Zonder login-scherm: trusted networks + één user voor het Pi-IP. Alleen `allow_bypass_login` zonder `trusted_users` logt automatisch in als er **één** HA-user is; bij meerdere users krijg je een keuzelijst. Koppel het IP daarom aan het kiosk-user-id:
+
+```yaml
+homeassistant:
+  auth_providers:
+    - type: trusted_networks
+      trusted_networks:
+        - 192.168.1.50/32
+      trusted_users:
+        192.168.1.50:
+          - 0123456789abcdef0123456789abcdef
+      allow_bypass_login: true
+    - type: homeassistant
+```
+
+User-id: Instellingen → Personen → user openen; id staat in de URL (`/config/users/<id>`). `homeassistant` als tweede provider laten staan, anders kun je vanaf andere IP’s niet meer met wachtwoord inloggen. Daarna HA herstarten.
+
+Niet het Chromium-profiel wissen en niet als admin in de kiosk inloggen.
+
 ## Volume-bescherming
 
 - Harde cap `max_volume` (80). HA 100% = die cap.
