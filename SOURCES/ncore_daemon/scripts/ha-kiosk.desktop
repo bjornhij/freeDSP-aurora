@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Home Assistant kiosk
+Comment=Fullscreen Home Assistant UI
+Exec=/home/ncore/ncore_daemon/scripts/ha-kiosk.sh
+X-GNOME-Autostart-enabled=true
+Terminal=false

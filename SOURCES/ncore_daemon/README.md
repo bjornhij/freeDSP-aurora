@@ -1,32 +1,65 @@
 # Ncore / aurora daemon
 
-Python-brug tussen de freeDSP aurora (serieel), Hypex Ncore (GPIO) en Home Assistant. Geen Volumio-API. De Java-daemon blijft staan tot deze service draait.
+Python-brug tussen de freeDSP aurora (serieel), Hypex Ncore (GPIO), het scherm, en Home Assistant. Geen Volumio, geen Docker. Home Assistant draait **elders**; deze Pi 4 toont de UI fullscreen en bedient de amp.
 
-## Installatie op de Pi
+## Kale installatie (Raspberry Pi 4)
 
-```bash
-sudo apt-get update
-sudo apt-get install -y python3-venv python3-pip
-cd ~
-git clone <deze-repo>   # of kopieer SOURCES/ncore_daemon
-cd ncore_daemon
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-pip install -r requirements-pi.txt   # gpiozero + evdev, alleen op de Pi
-cp config.example.yaml config.yaml
-# serial_port, gpio_bcm_pin, ir_device_name, ha_webhook_url aanpassen
-```
+### 1. Imager
 
-Serial device op de Pi (niet het Mac-pad `/dev/tty.MALS`):
+Raspberry Pi Imager, **Raspberry Pi OS (64-bit) met desktop** (niet Lite — Chromium-kiosk heeft een GUI nodig):
+
+- hostname: `hypex-amp`
+- SSH aan
+- gebruiker: `ncore` (niet `volumio`)
+- wifi of ethernet
+
+Eerste boot:
 
 ```bash
-ls /dev/ttyUSB* /dev/ttyAMA* /dev/serial* 2>/dev/null
+sudo apt update && sudo apt full-upgrade -y
+sudo raspi-config
 ```
 
-GPIO: Java Pi4J `GPIO_09` is WiringPi 9 = **BCM 3**. Controleer je bedrading voordat je de amp aanzet.
+In raspi-config: **System Options → Auto Login** (desktop). **I2C niet aanzetten** als AMPON op BCM 3 blijft: dat is I2C1 SCL (`GPIO3`).
 
-IR-naam achterhalen (niet hard `event2` vertrouwen):
+### 2. Code en service
+
+Kopieer deze map naar `/home/ncore/ncore_daemon` (git clone van de repo en `cd SOURCES/ncore_daemon`, of rsync).
+
+```bash
+cd /home/ncore/ncore_daemon
+chmod +x scripts/install.sh scripts/ha-kiosk.sh
+./scripts/install.sh
+```
+
+Dat zet een venv, `config.yaml`, systemd `ncore-daemon` en Chromium-kiosk autostart. Log daarna opnieuw in zodat de groepen `gpio`, `dialout`, `input` en `video` gelden.
+
+### 3. Scherm herkennen
+
+Op een draaiende Pi (ook de oude):
+
+```bash
+cat /proc/device-tree/model; echo
+ls /sys/class/backlight/
+ls /sys/class/drm/
+grep -hE 'dtoverlay|display|hdmi|dsi|lcd' /boot/firmware/config.txt /boot/config.txt 2>/dev/null
+```
+
+- Map `rpi_backlight` = official 7" DSI. **Dit is de huidige hypex-amp** (Pi 4B 1.2). Amp aan zet backlight op 80, amp uit op 0.
+- `hdmi_force_hotplug=1` kan naast DSI in config.txt staan (tweede HDMI of oude workaround). Ontbreekt `rpi_backlight`, dan HDMI via `vcgencmd display_power`.
+- Geen `/sys/class/drm/` op oude Volumio/legacy-graphics is normaal; op verse Pi OS desktop bestaat die map wél.
+
+### 4. Hardware in `config.yaml`
+
+**Serial (aurora)** — niet het Mac-pad `/dev/tty.MALS`:
+
+```bash
+ls /dev/serial/by-id /dev/ttyUSB* 2>/dev/null
+```
+
+Zet `serial_port` op de `by-id`-symlink (blijft gelijk na reboot).
+
+**IR:**
 
 ```bash
 python3 - <<'PY'
@@ -37,46 +70,43 @@ for path in list_devices():
 PY
 ```
 
-Zet `ir_device_name` op een uniek deel van die naam. Fallback blijft `ir_device_path`.
+Zet `ir_device_name` op een uniek stuk van die naam. USB-IR verschijnt vanzelf; GPIO-IR: `dtoverlay=gpio-ir` in `/boot/firmware/config.txt`.
 
-Stop de oude Java-daemon en `ir_bridge.py` voordat je start: twee processen kunnen niet allebei `grab()` op dezelfde IR doen.
+**GPIO:** BCM 3, HIGH = amp uit. Eerste keer `dry_run: true` of speakers los tot de pin klopt.
 
-```bash
-sudo cp systemd/ncore-daemon.service /etc/systemd/system/
-sudo systemctl daemon-reload
-sudo systemctl enable --now ncore-daemon
-```
-
-De unit zit in de groepen `gpio`, `dialout`, `input` en `video` (backlight). User `volumio` aanpassen als je onder een andere account draait.
-
-Dry-run op een Mac (geen GPIO/serial/IR):
-
-```bash
-python3 -m ncore_daemon --dry-run
-```
-
-API: `http://hypex-amp.local:9090/` (debug-HTML) en `GET /status`.
-
-## Home Assistant
-
-Kopieer `homeassistant/ncore_amp.yaml` naar `configuration.yaml`. Webhook-id is `ncore_updated`. Op de Pi:
+**Home Assistant:**
 
 ```yaml
+ha_kiosk_url: "http://homeassistant.local:8123"
 ha_webhook_url: "http://homeassistant.local:8123/api/webhook/ncore_updated"
 ```
 
-De entiteit is `media_player.ncore_amp` (receiver: aan/uit, volume, bron). Geen muziekstreaming.
-
-## Tests
+Kiosk-login eenmalig in Chromium. Als het scherm leeg blijft op Wayland: raspi-config → Advanced → Wayland → **X11**, reboot.
 
 ```bash
-pip install -r requirements-dev.txt
-python -m pytest
+sudo systemctl restart ncore-daemon
+curl -s http://127.0.0.1:9090/status
 ```
+
+`serial_ok` / `gpio_ok` / `ir_ok` moeten kloppen. Debug-UI: `http://hypex-amp.local:9090/`.
+
+## Home Assistant (op de server)
+
+Kopieer `homeassistant/ncore_amp.yaml` naar `configuration.yaml`. Webhook-id: `ncore_updated`. Entiteit: `media_player.ncore_amp` (aan/uit, volume, bron — geen muziekstreaming).
+
+## Volume-bescherming
 
 - Harde cap `max_volume` (80). HA 100% = die cap.
 - Boot: amp uit, DSP naar `power_on_volume` (9).
-- Power-on: `min(laatste volume, power_on_restore_cap)` (20) naar de DSP, **daarna** GPIO aan. Mislukt de DSP-write, blijft de amp uit.
-- Power-off: eerst mute op de DSP, dan GPIO uit.
-- Omhoog alleen in stappen van 1 met `volume_step_interval_ms` (150). IR-repeat is 150 ms, niet 1 ms.
+- Power-on: `min(laatste volume, power_on_restore_cap)` (20) naar de DSP, **daarna** GPIO aan.
+- Power-off: eerst mute op de DSP, dan GPIO uit (en scherm uit).
+- Omhoog alleen in stappen van 1 (`volume_step_interval_ms` 150). IR-repeat 150 ms.
 - Volume 0 stuurt wel mute naar de DSP.
+
+## Dry-run / tests (Mac)
+
+```bash
+python3 -m ncore_daemon --dry-run
+pip install -r requirements-dev.txt
+python -m pytest
+```

@@ -5,14 +5,16 @@ Wants=network-online.target
 
 [Service]
 Type=simple
-User=volumio
-Group=volumio
+User=ncore
+Group=ncore
 SupplementaryGroups=gpio dialout input video
-WorkingDirectory=/home/volumio/ncore_daemon
+WorkingDirectory=/home/ncore/ncore_daemon
 Environment=PYTHONUNBUFFERED=1
-ExecStart=/home/volumio/ncore_daemon/.venv/bin/python -m ncore_daemon --config /home/volumio/ncore_daemon/config.yaml
+ExecStart=/home/ncore/ncore_daemon/.venv/bin/python -m ncore_daemon --config /home/ncore/ncore_daemon/config.yaml
 Restart=always
 RestartSec=3
+
+# install.sh rewrites User/Group/paths for the account that runs it.
 
 [Install]
 WantedBy=multi-user.target

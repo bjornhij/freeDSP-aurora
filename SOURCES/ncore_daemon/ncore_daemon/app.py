@@ -27,6 +27,7 @@ def build_amp(settings: Settings) -> Amp:
         settings.backlight_path,
         max_brightness=settings.backlight_max,
         dry_run=settings.dry_run,
+        hdmi_power=settings.display_hdmi_power,
     )
     store = StateStore(settings.state_path)
     return Amp(

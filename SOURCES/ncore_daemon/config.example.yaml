@@ -3,24 +3,30 @@ host: "0.0.0.0"
 port: 9090
 dry_run: false
 
+# Prefer a stable by-id symlink: ls /dev/serial/by-id
 serial_port: "/dev/ttyUSB0"
 serial_baud: 115200
 
-# Pi4J WiringPi GPIO_09 = BCM 3 (I2C SCL). Confirm on the Pi before use.
+# Pi4J WiringPi GPIO_09 = BCM 3 (I2C SCL). Do not enable I2C on this Pi.
 gpio_bcm_pin: 3
 
+# Official 7" DSI (hypex-amp has /sys/class/backlight/rpi_backlight).
+# Amp on/off writes brightness 80 / 0. hdmi_force_hotplug=1 may also be in
+# config.txt; HDMI power is only used if this backlight path is missing.
 backlight_path: "/sys/class/backlight/rpi_backlight/brightness"
 backlight_max: 80
+display_hdmi_power: true
 
-# Match a substring of `python3 -c "from evdev import list_devices, InputDevice; ..."`
+# Match a substring of the evdev device name (not a hardcoded event2 number).
 ir_device_name: ""
 ir_device_path: "/dev/input/event2"
 ir_repeat_delay_ms: 500
 ir_repeat_period_ms: 150
 
-# Home Assistant: Settings → Automations → webhook ncore_updated
-# Example: http://homeassistant.local:8123/api/webhook/ncore_updated
+# Home Assistant (server elsewhere): webhook + Chromium kiosk URL
+# ha_webhook_url: "http://homeassistant.local:8123/api/webhook/ncore_updated"
 ha_webhook_url: ""
+ha_kiosk_url: "http://homeassistant.local:8123"
 
 state_path: "state.json"
 

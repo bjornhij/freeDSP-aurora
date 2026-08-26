@@ -25,6 +25,7 @@ class Settings(BaseSettings):
 
     backlight_path: str = "/sys/class/backlight/rpi_backlight/brightness"
     backlight_max: int = 80
+    display_hdmi_power: bool = True
 
     ir_device_name: str = ""
     ir_device_path: str = "/dev/input/event2"
@@ -32,6 +33,7 @@ class Settings(BaseSettings):
     ir_repeat_period_ms: int = 150
 
     ha_webhook_url: str = ""
+    ha_kiosk_url: str = "http://homeassistant.local:8123"
     state_path: str = "state.json"
 
     max_volume: int = 80
